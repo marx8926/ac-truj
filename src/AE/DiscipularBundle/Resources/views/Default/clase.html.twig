@@ -1,0 +1,180 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Clase - {% endblock %}
+
+{% block stylesheets %}
+	<link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+    <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/DT_bootstrap.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap.datepicker.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/vmodal.css')}}">  
+{% endblock %}
+
+{%block javascript %}
+  	<script src="{{asset('js/jquery.js')}}"></script>
+	<script src="{{asset('js/less.js')}}"></script>
+	<script src="{{asset('js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+	<script src="{{asset('js/bootstrap.js')}}"></script>
+	<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+	<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+	<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+	<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+	<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+	<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+	<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+	<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+	<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+	<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+	<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+	<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+	<script src="{{asset('js/ui.spinner.js')}}"></script>
+	<script src="{{asset('js/custom.js')}}"></script>			
+	<script src="{{asset('js/functiongen.js')}}"></script>
+	<script src="{{asset('js/modal.js')}}"></script>
+            
+    <script type="text/javascript">
+            $(document).ready(function() {
+                
+                
+            {% if is_granted('ROLE_PROFESOR')%}
+            	ajaxResposeData("tabla_asistencia",'{{path('_tabla_clase_asistencia',{'idclase':''})}}/{{idclase}}');
+            	enviar("ActualizarClaseForm",sayhola1);
+            	enviar("EditFechaForm",sayhola);
+            	enviar("EditOfrendaForm",sayhola);
+                {% endif%}
+            });
+            
+            var sayhola = function(data){
+        		//location.reload();                          
+        		}
+    
+           var sayhola1 = function(data){
+        		//location.reload();
+                          if(data.responseCode==200)
+                              alert('Registro Completado');
+        		}
+    		function Editar(classname){
+        		$("."+classname).attr("disabled",false);
+    		}
+    		function EditarDato(idnamelabel,idnameinput){
+				$("#"+idnamelabel).text($("#"+idnameinput).val());
+            }
+
+    		function CheckChange(check,idname){
+    			$("#"+idname).val(check.checked);
+    		}
+    </script>             
+{%endblock%}
+
+{% block content %}
+	<div class="span9">
+	<h1>Clase</h1>
+	<br>
+		<div class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label"><b>Curso:</b></label>
+				<div class="controls">
+					<p style="margin-top:5px;">{{ curso }}</p>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label"><b>Docente:</b></label>
+				<div class="controls">
+					<p style="margin-top:5px;">{{ docente }}</p>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label"><b>Tema:</b></label>
+				<div class="controls">
+					<p style="margin-top:5px;">{{ tema }}</p>
+				</div>
+			</div>
+			<div class="control-group">
+
+				<label class="control-label"><b>Fecha:</b></label>
+				<div class="controls">
+					<p style="margin-top:5px;" id="fecha_dicto">{{ fechadicto }}</p>
+                                        {% if is_granted('ROLE_PROFESOR')%}
+
+                                           <input id="registro" type="button" class="btn btn-primary" value="Editar">
+                                        {% endif %}
+				</div>
+
+                                {% if is_granted('ROLE_PROFESOR')%}
+				<div id="modal" class="styled">
+					<strong>Editar Fecha:</strong>
+					<form id="EditFechaForm" action="{{ path('discipular_actualizar_fecha_clase') }}" methos="POST">
+						<input type="text" class="datepick" id="fechainput" name="fecha" onchange="EditarDato('fecha_dicto','fechainput')">
+						<input type="hidden" name="idclase" value="{{idclase}}">
+						<input type="submit" class="btn btn-primary" id="finalizar" name="finalizar" value="Guardar">
+						<a class="btn" href="#close" id="close-modal">Cerrar</a>
+					</form>
+				</div>
+                                {% endif %}
+				<div id="modal-background"></div>
+			</div>
+			
+			<div class="control-group">
+
+				<label class="control-label"><b>Ofrenda:</b></label>
+				<div class="controls">
+					<p style="margin-top:5px;" id="ofrenda">{{ ofrenda }}</p>
+                                        {% if is_granted('ROLE_PROFESOR')%}
+
+                                           <input id="registro_ofrenda" type="button" class="btn btn-primary" value="Editar">
+                                        {% endif %}
+				</div>
+
+                                {% if is_granted('ROLE_PROFESOR')%}
+				<div class="control-group" >
+					<strong class="control-label">Ofrenda:</strong>
+					<form id="EditOfrendaForm" action="{{ path('discipular_actualizar_ofrenda_clase') }}" methos="POST" >
+						
+                                             <div class="controls">
+                                               <input type="text" id="ofrendainput" name="ofrenda" onchange="EditarDato('ofrenda','ofrendainput')" required>
+                                               
+						<input type="hidden" name="idclase" value="{{idclase}}">
+						<input type="submit" class="btn btn-primary" id="finalizar_ofrenda" name="finalizar" value="Guardar">
+						<a class="btn" href="#close" id="close-modal">Cerrar</a>
+                                            </div>
+					</form>
+				</div>
+                                {% endif %}
+				<div id="modal-background"></div>
+			</div>
+			
+			<div class="control-group">
+				<label class="control-label"><b>Archivo:</b></label>
+				<div class="controls">
+					<p style="margin-top:5px;"><a href="/ae/web/{{ urlfile }}" target="_blank">{{ namefile }}</a></p>
+				</div>
+			</div>
+		</div>
+		{% if is_granted('ROLE_PROFESOR')%}
+		<div class="box">
+			<div class="box-head">
+				<h3>Asistencia</h3>
+			</div>
+			<form id="ActualizarClaseForm" action="{{ path('discipular_editar_asistencia') }}" method="post">
+			<div id = "tabla_asistencia" class="box-content box-nomargin">
+			</div>
+			<input type="hidden" name="idclase" value="{{idclase}}">
+                        {% if is_granted('ROLE_PROFESOR')%}
+			<input type="button" class="btn btn-primary" value="Editar" onclick="Editar('modificable')">
+			
+                        <input type="submit" class="btn btn-primary" value="Guardar">
+                        {% endif %}
+			</form>
+		</div>
+		{% endif %}
+        
+            <form method="post" action="{{ path('discipular_lista_clases') }}">
+		<input type="hidden" name="datos" value="{{ idasignacion }}"> 
+		<input type="submit" class="btn" value="Atras">
+		</form>
+	</div>
+
+{% endblock %}

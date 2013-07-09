@@ -1,0 +1,323 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Distribuir Clases de Célula - {% endblock %}
+
+{% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{{asset('css/bootstrap.datepicker.css')}}">
+        <link rel="stylesheet" href="{{asset('css/DT_bootstrap.css')}}">  
+                       
+{% endblock %}                 
+
+{% block content %} 
+<div class="span9" >
+	<h1>Distribuir Clases de Célula</h1>
+	<div class="box">
+		<div class="box-head tabs">
+            <h3> Creación Célula</h3>							
+        </div>
+
+        <div class="box-content box-nomargin">
+        	<form id='form' method='POST'>
+                
+                    <input id='content' type='hidden' name='content' >
+                    <input id='title' type='hidden' name='title'>
+                    <input id='pdfbutton' type='button' value='PDF' class="btn btn-info">
+                    <input id='excelbutton' type='button' value='Excel' class="btn btn-info">
+            
+            	<table cellpadding="0" cellspacing="0" border="0" class="display table table-striped dataTable table-bordered"  id="persona" name="persona">
+            		<thead>
+                		<tr>
+                                    <th width="5%">ID</th>
+                                    <th>Título</th>
+                                    <th width="10%">Fecha</th>
+                                    <th width="25%">Autor</th>
+                                    <th width="10%">Tipo</th>
+                                    <th width="15%">Distribuido</th>
+		                </tr>
+			</thead>
+			<tbody id="tablas1" name="tablas1" >
+	
+			</tbody>
+                </table>
+
+                </form>
+    	</div>
+            
+                <form id="clase_celulaForm" name="clase_celulaForm" class="form-horizontal" action="{{path('enviar_crear_class_cell_update')}}" method="POST">    
+                 <fieldset> 
+                  <legend>Distribuir</legend>
+                  <div id="distribuir" name="distribuir">
+                  <div class="control-group">
+                    <label class="control-label">Día Limite</label>
+                    <div class="controls">
+                        <select id="dia" name="dia">
+                            <option value="Lunes">Lunes</option>
+                            <option value="Martes">Martes</option>
+                            <option value="Miercoles">Miércoles</option>
+                            <option value="Jueves">Jueves</option>
+                            <option value="Viernes">Viernes</option>
+                            <option value="Sabado">Sábado</option>
+                            <option value="Domingo">Domingo</option>
+                        </select>
+                       
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label">De</label>
+                    <div class="controls">
+                        
+                        <select id="de" name="de">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                        </select>
+                    </div>
+                  </div>
+                  
+                  <div class="control-group">
+                    <label class="control-label">Hasta</label>
+                    <div class="controls">
+                        <select id="hasta" name="hasta" >
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="13">13</option>
+                            <option value="14">14</option>
+                            <option value="15">15</option>
+                            <option value="16">16</option>
+                            <option value="17">17</option>
+                            <option value="18">18</option>
+                            <option value="19">19</option>
+                            <option value="20">20</option>
+                            <option value="21">21</option>
+                            <option value="22">22</option>
+                            <option value="23">23</option>
+                        </select>
+                    </div>
+                  </div>
+                   </div>
+                   <div class="control-group">
+                        <label class="control-label">Redes</label>
+                        <div class="controls">
+                            <select id="redes" name="redes">
+                            
+                            </select>
+                        </div>
+                    </div>
+            </fieldset>
+            	<div class="control-group">
+            		<div class="controls">
+            			<input type="submit" class="btn btn-primary" id="vista" name="vista" value="Asignar">
+            		</div>
+            	</div>
+                </form>
+              </div> 
+            
+	</div>
+        
+        
+</div>    
+                 
+{% endblock %}
+      
+ {%block javascript %}
+            
+            <script src="{{asset('js/jquery.js')}}"></script>
+			<script src="{{asset('js/less.js')}}"></script>
+			<script src="{{asset('js/bootstrap.min.js')}}"></script>
+			<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+			<script src="{{asset('js/bootstrap.js')}}"></script>
+			<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+			<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+			<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+			<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+			<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+			<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+			<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+			<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+			<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+			<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+			<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+			<script src="{{asset('js/ui.spinner.js')}}"></script>
+			<script src="{{asset('js/custom.js')}}"></script>
+                        <script src="{{asset('js/functiongen.js')}}"></script>
+                        <script src="{{asset('js/tiempo.js')}}"></script>
+                        <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+                        <script src="{{asset('js/datatable_plugins.js')}}"></script>
+
+			
+			<script src="https://www.google.com/jsapi"></script>
+            <!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->              
+            <script src="{{asset('js/DT_bootstrap.js')}}"> </script>
+            <script src="{{asset('js/tablasfeatures.js')}}"></script>
+ 
+    <script type="text/javascript">
+          
+   
+         var trselected; 
+	 var oTable;
+         var val = [];
+         
+        var values = [];
+        
+      function redes(dato)
+      {        
+        $('#redes').empty();
+                     
+        $("<option value='ALL'>Todas</option>").appendTo('#redes');
+                
+        for(var i=0;i<dato.length;i++)
+        {
+                    $('<option value='+dato[i].id+'>'+dato[i].id+'-'+dato[i].nombre+' '+dato[i].apellidos+'</option>').appendTo('#redes');
+
+        }    
+       }
+         
+	$(document).ready(function() {
+            
+            $('#distribuir').css({'display':'none'});
+            
+        
+             $.ajax(
+                   {
+                    url : '{{path('servicio_red')}}',
+                    dataType:"json",
+                    type: "POST",
+                    async: false,
+                   }
+                   ).done(redes);
+        
+            
+            $("#vista").css({"display":"none"});
+            $("#analizar").css({"display":"none"});
+        
+            $("#pdfbutton").click(function(event) {
+            $("#persona th").css("width","auto");
+        	$("#content").val($("#persona").html());
+        	$("#title").val($("h3").html());
+        	//$("#content").val($("#lol").html() + $("tbody").html());
+            $("#form").attr("action", "{{asset('extensiones/exportpdf.php')}}");
+	 		$("#form").submit();
+        });
+
+        $("#excelbutton").click(function(event) {
+        	$("#content").val("<table>" + $("#persona").html() + "</table>");
+	$("#form").attr("action", "{{asset('extensiones/exportexcel.php')}}");
+	$("#form").submit();
+        });
+        
+            $('#persona tbody').click(function(event){
+                $(oTable.fnSettings().aoData).each(function(){
+                    $(this.nTr).removeClass('row_selected');
+                });
+                
+                $(event.target.parentNode).addClass('row_selected');
+                
+                trselected = $(event.target.parentNode);
+                
+                var tds = $(trselected).find('td');
+                values = [];
+  
+                $.each(tds, function(index, item) {
+                    values.push(item.innerHTML); 
+                });      
+                
+                $("#vista").css({"display":"block"});
+                
+                val = values;
+                enviar("clase_celulaForm",funcion, val);
+
+                
+            });
+            
+            var funcion = function(data)
+            {
+                //console.log(data.greeting);
+                console.log(data);
+                if(data.responseCode==200)
+                {
+                    alert('Registro Completado');
+                   //location.reload();
+                   oTable.fnReloadAjax();
+                }
+                else
+                {
+                    alert('Error inesperado');
+                }
+                
+            }
+
+            /* Build the DataTable with third column using our custom sort functions */
+            oTable = $('#persona').dataTable( {
+                                    
+                "bProcessing": true,
+                "bServerSide": false,
+                "bDestroy": true,
+                "sAjaxSource": '{{path('servicio_enviar_contar_clase_celula')}}',
+                "aoColumns": [
+                    { "mDataProp": "id" },
+                    { "mDataProp": "titulo" },
+                    { "mDataProp": "fecha" },
+                    { "mDataProp": "autor" },
+                    { "mDataProp": "tipo"},
+                    { "mDataProp": "enviado" }
+                ],
+		"aaSorting": [ [2,'desc'], [5,'desc'] ],
+		"aoColumnDefs": [
+                    { "sType": 'string-case', "aTargets": [ 2 ] }
+		],"sDom": 'T<"clear">lfrtip',
+                "oTableTools": {
+			"sRowSelect": "single",
+                        "fnRowSelected": function ( node ) {
+                            var s=$(node).children();
+                            alert("Selected Row : " + s[0]);
+                        }
+		},
+                "sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+					"sPaginationType": "bootstrap",
+					"oLanguage": {
+						"sLengthMenu": "_MENU_ registros por página"
+					}
+            } );	
+  
+            
+	 });
+         
+       </script>
+{%endblock %} 

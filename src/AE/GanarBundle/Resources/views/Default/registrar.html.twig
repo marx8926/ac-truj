@@ -1,0 +1,472 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Registrar Usuario - {% endblock %}
+
+{% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{{asset('js/jquery-addresspicker/demos/themes/base/jquery.ui.all.css')}}">
+        <link rel="stylesheet" href="{{asset('css/bootstrap.datepicker.css')}}">
+ {% endblock %}
+         
+  {%block javascript %}
+  	<script src="{{asset('js/jquery.js')}}"></script>
+	<script src="{{asset('js/less.js')}}"></script>
+	<script src="{{asset('js/bootstrap.js')}}"></script>
+	<script src="{{asset('js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/jquery.peity.js')}}"></script>
+	<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+	<script src="{{asset('js/jquery.flot.js')}}"></script>
+	<script src="{{asset('js/jquery.color.js')}}"></script>
+	<script src="{{asset('js/jquery.flot.resize.js')}}"></script>
+	<script src="{{asset('js/custom.js')}}"></script>            
+    <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+    <script src="{{asset('js/jquery-addresspicker/lib/jquery-ui-1.8.7.min.js')}}" > </script>
+    <script src="{{asset('js/jquery-addresspicker/src/jquery.ui.addresspicker.js')}}"> </script>     
+    <script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+  	<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+        <script src="{{asset('js/mapa.js')}}"></script>
+        <script src="{{asset('js/ganar.js')}}"></script>
+           
+            
+            <script type="text/javascript">
+             $(document).ready(function(){
+                  //init red
+                  
+                  var rede = '{{red}}';
+                  
+                  {% if is_granted('ROLE_GANAR') %}
+                    initRed('{{path('servicio_red_sin')}}');
+                                     
+                  {% else %}                      
+                      
+                      if(rede.length ===0)
+                      $("<option value='-1'>Sin red </option>").appendTo('#red_lista');
+                      else $("<option value='"+rede+"'>"+rede+"</option>").appendTo('#red_lista');
+
+                      $("<option value='-1'>Sin  Celula </option>").appendTo('#celula_lista');
+
+                  {% endif%}
+                      
+                  //lista de departamentos
+                  initDepartamentos('{{path('servicio_region')}}');
+ 
+                  //lista de lugares
+                  initLugar('{{path('servicio_lugar')}}');
+      
+                  var x =$("login");
+                    x.click();
+    
+                    $("#myForm").submit(function(event){                        
+                    event.preventDefault();                             
+                    //get the url for the form
+                    var url=$("#myForm").attr("action");                     
+                    //start send the post request 
+                    //console.log($("#myForm").serialize());
+                    $.post(url,{
+                        formName:$("#myForm").serialize(),
+                        other:"attributes"
+                    },function(data){                      
+                    //the response is in the data variable
+                    if(data.responseCode===200 ){          
+                      
+                        alert('Registro Completado');
+                        location.reload();
+                    }
+                    else if(data.responseCode===400){//bad request
+                       alert('Error bad request');
+                        }
+                    else{                        
+                        if(data.responseCode===500)
+                        {
+                            alert('Error bad request');
+                        }
+                        else alert("An unexpeded error occured.");
+                        }
+                    }
+                    );
+                    return false;});
+                    
+                  mapeo_position('lat','lng','addresspicker_map','map');     
+                  //dibujar_mapa('map','lat','lng','addresspicker_map');
+            });
+
+            function recargar_celula()
+            {
+                var nombre = $("#red_lista option:selected").val();  
+            
+                 var route = '{{path('servicio_celula',{'id': 'name'})}}';
+            
+                 var rutas = route.replace('name',nombre);
+                 
+                
+                 $.ajax(
+                        {url : rutas,
+                         dataType:"json",
+                        type: "POST",
+                        async: false,
+                        }
+                        ).done(celula);   
+                }
+     
+             function recarga_provincias()
+             {
+                 var route = '{{path('servicio_provincia',{'id': 'nom'})}}';            
+
+                 var id = $("#departamento_lista option:selected").val();              
+                 var rutas = route.replace('nom',id);         
+                 $.ajax(
+                        {   url : rutas,
+                            dataType:"json",
+                            type: "POST",
+                            async: false,
+                        }
+                    ).done(provincias);
+                        
+             }  
+    
+                function recarga_distritos()
+                {
+                    var route = '{{path('servicio_distrito',{'dep':'id1','prov':'id2'})}}';
+
+                    var dep=$("#departamento_lista option:selected").val();
+                    var prov = $("#provincia_lista option:selected").val();
+   
+                    
+                    var rutas = route.replace('id1', dep);                    
+                    rutas = rutas.replace('id2', prov);
+                    
+                     $.ajax(
+                        {   url : rutas,
+                            dataType:"json",
+                            type: "POST",
+                            async: false,
+                        }
+                    ).done(distrito);
+                };
+ 
+            </script>             
+     {%endblock%}
+            
+            
+{% block content %}
+    <div class="span9" id="registro_form">
+    <h1>Registrar Usuario</h1>
+    <br>
+        <form class="form-horizontal" action="{{path('ganar_addpersona')}}" method="POST" id="myForm">
+           
+            <fieldset>
+            {% if (is_granted('ROLE_ADMIN')) %}
+                <legend>Usuario</legend>
+                <div class="control-group">
+                    <label class="control-label" >Usuario</label>
+                    <div class="controls">
+                        <input type="text" id="inputUsuario" name="inputUsuario" placeholder="Usuario" class="input-xxlarge" pattern="|^[a-zA-Z0-9]+$|" />
+                    </div>
+                </div>
+        
+                <div class="control-group">     
+                    <label class="control-label" >Email</label>      
+                    <div class="controls">
+                        <input type="text" id="inputEmail" name="inputEmail" placeholder="Email" class="input-xxlarge" pattern="[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+" />      
+                    </div>      
+                </div>
+       
+                <div class="control-group">     
+                    <label class="control-label" >Contraseña</label>      
+                    <div class="controls">
+                        <input type="password" id="inputPassword" name="inputPassword" placeholder="Contraseña" class="input-xxlarge"/>      
+                    </div>
+                </div>
+                
+  
+            {% else %}
+                
+                <div >
+                
+                <div class="control-group">
+                    <label class="control-label" ></label>
+                    <div class="controls">
+                        <input type="hidden" id="inputUsuario" name="inputUsuario" placeholder="Usuario" class="input-xxlarge" pattern="|^[a-zA-Z0-9]+$|" />
+                    </div>
+                </div>
+        
+                <div class="control-group">     
+                    <label class="control-label" >Email</label>      
+                    <div class="controls">
+                        <input type="text" id="inputEmail" name="inputEmail" placeholder="Email" class="input-xxlarge" pattern="[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9.-]+" />      
+                    </div>      
+                </div>
+       
+                <div class="control-group">     
+                    <label class="control-label" ></label>      
+                    <div class="controls">
+                        <input type="hidden" id="inputPassword" name="inputPassword" placeholder="Contraseña" class="input-xxlarge"/>      
+                    </div>
+                </div>
+                </div>
+           
+            {% endif %}
+                
+           </fieldset>
+            
+            <fieldset>
+                <legend>Datos Personales</legend>        
+                <div class="control-group" >
+                    <label class="control-label"> Nombres (*) </label>
+                    <div class="controls">
+                        <input type="text" id="inputNombres" name="inputNombres" placeholder="Nombres" class="input-xxlarge" required="true" pattern="|^[a-zA-Z ñÑáéíóúüç]+$|" required />
+                    </div>
+                </div>
+        
+                <div class="control-group" >
+                    <label class="control-label">Apellidos (*)</label>
+                    <div class="controls">
+                        <input type="text" id="inputApellidos" name="inputApellidos" placeholder="Apellidos" class="input-xxlarge" pattern="|^[a-zA-Z ñÑáéíóúüç]+$|" required />
+                    </div>
+                </div>
+                
+                <div class="control-group ">
+                    <label class="control-label" for="select02"> Estado Civil (*)</label>
+                    <div class="controls">
+                        <select id="select_Civil" name="select_Civil" required>
+                            <option value="0">Solter@</option>
+                            <option value="1">Casad@</option>  
+                            <option value="2">Conviviente</option>
+                            <option value="3">Viud@</option>
+                            <option value="4">Divorciado</option>
+                            <option value="5">Madre Soltera</option>
+
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class= "control-label" for="select01"> Sexo (*) </label>
+                    <div  class="controls">
+                        <select name="select_Sexo" id="select_Sexo" required >
+                            <option value="1">Masculino</option>
+                            <option value="2">Femenino</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" >DNI (*)</label>
+                    <div class="controls">
+                        <input type="text" class="input-large" placeholder="DNI" id="inputDni" name="inputDni" pattern="[0-9]{8}" required />
+                        <p class="help-block">8 digitos</p>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" >Ocupación (*)</label>
+                    <div class="controls">
+                        <input type="text" class="input-large" placeholder="Ocupación" id="inputOcupacion" name="inputOcupacion" required />
+                    </div>
+                </div>
+        
+                <div class="control-group">
+                    <label class="control-label" >Fecha nacimiento (*)</label>
+                    <div class="controls">
+                        <input type= "text" class="datepick" id="inputFechaNacimiento" name="inputFechaNacimiento"/>
+                       <p class="help-block">Día/Mes/Año</p>  
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" >Edad (*)</label>
+                    <div class="controls">
+                        <input type="number" min="0"  max="120" class="input-large" placeholder="Edad" id="inputEdad" name="inputEdad" required/>
+                    </div>
+                </div>
+        
+                <div class="control-group">
+                    <label class="control-label" >Teléfono</label>
+                    <div class="controls">
+                        <input type="text" class="input-large" placeholder="Telefono" id="inputTelefono" name="inputTelefono" pattern="[0-9]{9}"/>
+                        <p class="help-block">0codigonúmero</p>
+                    </div>
+                </div>
+        
+                <div class="control-group">
+                    <label class="control-label" >Celular</label>
+                    <div class="controls">
+                        <input type="text" class="input-large" placeholder="Celular" id="inputCelular" name="inputCelular"  />
+                        <p class="help-block">9 digitos</p>
+                    </div>
+                </div>
+
+            </fieldset>
+            
+            <fieldset>
+                <legend>Ubicación</legend>
+        
+                <div class="control-group">
+                    <label class="control-label">Dirección (*)</label>
+                    <div class="controls">
+                        <input type="text" class="input-xxlarge" id="inputDireccion" name="inputDireccion" required />
+                    </div>
+                </div>
+        
+                <div class="control-group">
+                    <label class="control-label">Referencia</label>
+                    <div class="controls" >
+                        <input type="text" class="input-xxlarge" id="inputReferencia" name="inputReferencia" />
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" >Departamento (*)</label>
+                    <div class="controls">
+                        <select name="departamento_lista" id="departamento_lista" required >
+                    
+                        </select>
+                    </div>
+                </div>
+        
+                <div class="control-group">
+                    <label class="control-label" >Provincia (*)</label>
+                    <div class="controls">
+                        <select name="provincia_lista" id="provincia_lista" required>
+                   
+                        </select>
+                    </div>
+                </div>
+        
+                <div class="control-group">
+                    <label class="control-label">Distrito (*)</label>
+                    <div class="controls">
+                        <select name="distrito_lista" id="distrito_lista" required>
+                    
+                        </select>
+                    </div>        
+                </div>
+                
+		         <div class="control-group">
+		         	<label class="control-label">Ubicación</label>
+		            <div id="map-ll" style="display: none;">
+				    	<label style="display:none;">Dirección: </label> <input id="addresspicker_map" name="addresspicker_map" disabled="disabled" style="display: none;"/>
+						<label>Latitud:</label> <input id="lat" name="latitud"  value="-8.097944">
+						<label>Longitud:</label> <input id="lng" name="longitud" value="-79.03704479999999">
+					</div>
+				    <div class="controls">
+				    	<div id="map" class="input-xxlarge"></div>
+				    </div>
+		        </div>
+        
+    </fieldset>
+    <fieldset>
+        <legend>Iglesia</legend>
+        <div class="control-group">
+            <label class="control-label" >Red</label>
+            <div class="controls">
+                <select id="red_lista" name="red_lista" >
+                   
+                </select>
+            </div>
+        </div>
+       
+        <div class="control-group">
+            <label class="control-label">Célula</label>
+            <div class="controls">
+                <select id="celula_lista" name="celula_lista" >
+                   
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Fecha de Conversión (*)</label>
+            <div class="controls">
+                <input type= "text" class="datepick" id="inputFechaConversion"
+                       name="inputFechaConversion" required/>
+                <p class="help-block">Día/Mes/Año</p>  
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">Dia de Visitas (*)</label>
+            <div class="controls">
+                <select id="dia_lista" name="dia_lista" required >
+                    <option value="Lunes">Lunes</option>
+                    <option value="Martes">Martes</option>
+                    <option value="Miercoles">Miercoles</option>
+                    <option value="Jueves">Jueves </option>
+                    <option value="Viernes">Viernes </option>
+                    <option value="Sabado">Sabado</option>
+                    <option value="Domingo">Domingo</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="control-group" >
+            <label class="control-label">Hora de Visitas (*)</label>
+            <div class="controls">
+                <input type="time" id="inputHora" name="inputHora" value="00:00:00" required >                       
+            </div>
+        </div>
+        
+        
+        <div class="control-group">
+            <label class="control-label">Lugar (*)</label>
+            <div class="controls">
+                <select id="lugar" name="lugar" required>
+                   
+                </select>
+            </div>
+        </div>
+    </fieldset>
+            
+    <fieldset>
+        
+        <legend>Redes Sociales</legend>        
+        
+        <div class="control-group">
+            <label class="control-label">Facebook</label>
+            <div class="controls">
+                <input type="text" class="input-xxlarge" id="inputFacebook" name="inputFacebook">
+                
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Twitter</label>
+            <div class="controls">
+                <input type="text" class="input-xxlarge" id="inputTwitter" name="inputTwitter">
+                
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label"> Pagina Personal</label>
+            <div class="controls">
+                <input type="text" class="input-xxlarge" id="inputWebpage" name="inputWebpage">
+                
+            </div>
+        </div>
+            
+    </fieldset>
+            
+   <fieldset>
+                <legend>Descripción</legend>
+                
+               <div class="control-group">
+                    <label class="control-label">Descripción</label>
+                    <div class="controls">
+                        <textarea rows="5" id="inputDescripcion" name="inputDescripcion" class="input-xxlarge" required> </textarea>
+                    <p class="help-block">Pedido de oración u otro detalle</p>
+                    </div>
+                </div>          
+            
+   </fieldset>
+
+   <div class="control-group">
+        <div class="controls">
+        	<input class="btn btn-primary" type="submit" id="login" name="login" value="Registrar" />
+        </div>
+   </div>
+              
+   </form>
+        
+
+</div>
+{% endblock %}

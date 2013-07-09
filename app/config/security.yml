@@ -1,0 +1,79 @@
+jms_security_extra:
+    secure_all_services: false
+    expressions: true
+
+security:
+    encoders:
+        AE\DataBundle\Entity\Usuario: 
+          algorithm: sha512
+          encode-as-base64: true
+          iterations: 10
+
+    role_hierarchy:
+        ROLE_PASTOR_EJECUTIVO: [ROLE_PASTOR_ASOCIADO]
+        ROLE_PASTOR_ASOCIADO: [ROLE_GANAR, ROLE_CONSOLIDAR, ROLE_DISCIPULAR,ROLE_ENVIAR]
+        ROLE_ENVIAR: [ROLE_MISIONERO]
+        ROLE_MISIONERO: [ROLE_USER]
+        ROLE_GANAR: [ROLE_USER]
+        ROLE_CONSOLIDAR: [ROLE_LIDER_RED]
+        ROLE_LIDER_RED: [ROLE_LIDER,ROLE_CONSOLIDADOR]
+        ROLE_CONSOLIDADOR: [ROLE_USER]
+        ROLE_LIDER: [ROLE_LIDER12]
+        ROLE_LIDER12:  [ROLE_LIDER144]
+        ROLE_LIDER144: [ROLE_LIDER1728]
+        ROLE_LIDER1728: [ROLE_LIDERSIN]
+        ROLE_LIDERSIN: [ROLE_USER]
+        ROLE_DISCIPULAR: [ROLE_PROFESOR]
+        ROLE_PROFESOR: [ROLE_ESTUDIANTE]
+        ROLE_ESTUDIANTE: [ROLE_USER]
+        ROLE_SECRE: [ROLE_USER]
+        ROLE_ADMIN:       [ROLE_USER, ROLE_PASTOR_EJECUTIVO,ROLE_SECRE]
+     
+
+    providers:
+       user_db:
+         entity: {class: AE\DataBundle\Entity\Usuario, property: nombre}
+    firewalls:
+       ## wsse_secured:
+         ## pattern:   /api/.*
+          ##wsse:      { nonce_dir: null, lifetime: 300, realm: null, profile: UsernameToken } 
+
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        main:
+          pattern: /.*
+          form_login:
+            login_path: /ingreso
+            check_path: /ingreso_check
+            remember_me: true
+            default_target_path: /main
+          logout:
+            path: /salir
+            target: /ingreso
+
+          remember_me:
+            key: MiPassphrase
+            lifetime: 1800
+            path: /.*
+            domain: ~
+          security: true
+          anonymous: true
+        
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
+
+    access_control:
+        - { path: ^/ingreso, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/sobre, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/contacto, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - { path: ^/contacto_up, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
+        - {path: /user, roles: ROLE_USER }
+        - {path: /admin, roles: ROLE_ADMIN}
+        - {path: /.*, roles: ROLE_USER ,requires_channel: https }
+   #     - { path: ^/_internal/secure, roles: IS_AUTHENTICATED_ANONYMOUSLY, ip: 127.0.0.1 }
+  
+
+    

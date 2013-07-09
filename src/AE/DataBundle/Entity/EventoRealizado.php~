@@ -1,0 +1,46 @@
+<?php
+
+namespace AE\DataBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * EventoRealizado
+ *
+ * @ORM\Table(name="evento_realizado")
+ * @ORM\Entity
+ */
+class EventoRealizado
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="evento_realizado_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+
+    /**
+     * @var \Evento
+     *
+     * @ORM\ManyToOne(targetEntity="Evento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_evento", referencedColumnName="id")
+     * })
+     */
+    private $idEvento;
+
+    /**
+     * @var \Persona
+     *
+     * @ORM\ManyToOne(targetEntity="Persona")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_persona", referencedColumnName="id")
+     * })
+     */
+    private $idPersona;
+
+
+}

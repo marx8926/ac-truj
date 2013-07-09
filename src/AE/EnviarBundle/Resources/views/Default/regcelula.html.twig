@@ -1,0 +1,390 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Registrar Célula - {% endblock %}
+
+{% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/DT_bootstrap.css')}}">
+        <link rel="stylesheet" href="{{asset('css/bootstrap.datepicker.css')}}">
+        <link rel="stylesheet" href="{{asset('js/jquery-addresspicker/demos/themes/base/jquery.ui.all.css')}}">
+{% endblock %}
+
+{%block content %}
+            <div class="span9" id="registro_form">
+                <form class="form-horizontal" action="{{path('enviar_addcelula')}}"  method="POST" id="myForm">
+                    <legend>Registro de Células</legend>
+        
+                    <fieldset> 
+                        <div class="control-group">
+                            <label class="control-label" >Familia</label>
+                            <div class="controls">
+                                <input type="text" id="inputFam" name="inputFam" placeholder="Familia" class="input-xxlarge" pattern="|^[a-zA-Z ñÑáéíóúüç]+$|" required autofocus>
+                            </div>
+                        </div>
+            
+                        <div class="control-group">
+                            <label class="control-label" >Teléfono</label>
+                            <div class="controls">
+                                <input type="text" id="inputTel" name="inputTel" placeholder="Telefono" class="input-xxlarge"  />
+                            </div>
+                        </div>
+                
+                        <div class="control-group">
+                            <label class="control-label" >Tipo de Célula  </label>
+                            <div class="controls">
+                                <select id="tipo_cell" name="tipo_cell" required >
+                                    <option value="0">Evangelistica</option>
+                                    <option value="1">Mentoreo</option>
+                                </select>
+                            </div>
+                        </div>
+                
+                        <div class="control-group">
+                            <label class="control-label" for="iglesia">Iglesia</label>
+                            <div class="controls">
+                                <select id="iglesia_lista" name="iglesia_lista" required >
+                   
+                                </select>
+                            </div>
+                        </div>
+                
+                        <div class="control-group">
+                            <label class="control-label" for="red">Red</label>
+                            <div class="controls">
+                                <select id="red_lista" name="red_lista" required >
+                   
+                                </select>
+                            </div>
+                        </div>    
+                            
+                       <div class="control-group">
+                            <label class="control-label" >Creación</label>
+                            <div class="controls">
+                                <input type="text" id="creacion" name="creacion" class="datepick" required >
+                                <p class="help-block">Día/Mes/Año</p>  
+                            </div>
+                        </div> 
+                            
+                         <div class="control-group">
+                            <label class="control-label" >Día</label>
+                            <div class="controls">
+                                <select id="dia" name="dia" required >
+                                    <option value="Lunes">Lunes</option>
+                                    <option value="Martes">Martes</option>
+                                    <option value="Miercoles">Miercoles</option>
+                                    <option value="Jueves">Jueves</option>
+                                    <option value="Viernes">Viernes</option>
+                                    <option value="Sabado">Sabado</option>
+                                    <option value="Domingo">Domingo</option>
+                                </select>
+                            </div>
+                        </div>        
+                            
+                        <div class="control-group">
+                            <label class="control-label">Hora</label>
+                            <div class="controls">
+                                <input type="time" id="hora" name="hora" value="00:00:00" required >
+                            </div>
+                        </div>        
+                       
+                    </fieldset>
+        
+        <fieldset>
+        <legend>Ubicación</legend>
+        
+        <div class="control-group">
+            <label class="control-label">Dirección</label>
+            <div class="controls">
+                <input type="text" pattern="|^([a-zA-ZñÑáéíóúüç0-9.]+\s*)+$" class="input-xxlarge" id="inputDireccion" name="inputDireccion" required>
+                
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Referencia</label>
+            <div class="controls" >
+                <input type="text" class="input-xxlarge" id="inputReferencia" name="inputReferencia">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" >Departamento</label>
+            <div class="controls">
+                <select name="departamento_lista" id="departamento_lista" required >
+                    
+                </select>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label" >Provincia</label>
+            <div class="controls">
+                <select name="provincia_lista" id="provincia_lista" required>
+                   
+                </select>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <label class="control-label">Distrito</label>
+            <div class="controls">
+                <select name="distrito_lista" id="distrito_lista" required>
+                    
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+        	<label class="control-label">Ubicación</label>
+        	<div id="map-ll" style="display:none;">
+            	<label style="display:none;">Dirección: </label> <input id="addresspicker_map" name="addresspicker_map" disabled="disabled" style="display: none;"/>   <br/>
+				<label>Latitud:</label> <input id="lat" name="latitud" value="-8.097944">
+                <label>Longitud:</label> <input id="lng" name="longitud" value="-79.03704479999999"> <br/>
+            </div>
+            <div class="controls">
+         		<div id="map" class="input-xxlarge"></div>
+         	</div>
+        </div>
+        
+        <div id="lider_block" name="lider_block" >
+            
+         <fieldset > 
+                <legend>Lider</legend>
+                <div class="control-group">
+                <label class="control-label">Añadir</label>
+                    <div class="controls">
+                         <select id="tip_red" name="tip_red" required>
+                                <option value="0">Lider de red</option>                                
+                                <option value="1">Pastor Ejecutivo</option>
+                                <option value="2">Misionero</option>
+                                <option value="3">Lider</option>
+                            </select>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label">ID</label>
+                    <div class="controls">
+                        <select id="ids" name="ids" required >
+                        
+                        </select>
+                    </div>
+                </div>
+                
+                
+            </fieldset>
+                
+        </div>  
+        <div class="control-group">
+            <label></label>
+                <div class="controls">
+                    <input class="btn btn-primary" type="submit" name="login" value="Registrar" />
+                </div>
+        </div>
+        </fieldset>
+        </form>
+            <div id="output"></div>
+            </div>
+         
+{% endblock %}
+     
+{%block javascript %}
+	<script src="{{asset('js/jquery.js')}}"></script>
+	<script src="{{asset('js/less.js')}}"></script>
+	<script src="{{asset('js/bootstrap.js')}}"></script>
+	<script src="{{asset('js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/jquery.peity.js')}}"></script>
+	<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+	<script src="{{asset('js/jquery.flot.js')}}"></script>
+	<script src="{{asset('js/jquery.color.js')}}"></script>
+	<script src="{{asset('js/jquery.flot.resize.js')}}"></script>
+	<script src="{{asset('js/custom.js')}}"></script>            
+        <script src="https://maps.google.com/maps/api/js?sensor=true"></script>
+        <script src="{{asset('js/jquery-addresspicker/lib/jquery-ui-1.8.7.min.js')}}" > </script>
+        <script src="{{asset('js/jquery-addresspicker/src/jquery.ui.addresspicker.js')}}"> </script>     
+        <script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+  	<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+        <script src="{{asset('js/functiongen.js')}}"> </script>
+        <script src="{{asset('js/mapa.js')}}"></script>
+        <script src="{{asset('js/ganar.js')}}"></script>
+	<!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->
+	
+	<script type="text/javascript">          
+                
+                function listas(entrada)
+                {
+                    var rede = $('#red_lista').val();
+
+                    if(rede!='-1')
+                    switch(entrada)
+                    {                        
+                        case 0: //lider de red
+                            
+                            ajaxListPost('{{path('_enviar_lista_lider_red_cell')}}','ids',rede);
+                            break;
+                        case 1: //pastor ejecutivo
+                            ajaxListPost('{{path('_enviar_lista_pastor_ejecutivo_cell')}}','ids',rede);
+                            break;
+                        case 2: //misioneros
+                            ajaxListPost('{{path('_enviar_lista_misionero_cell')}}','ids',rede);
+                            break;
+                            
+                        case 3: //lideres
+                            ajaxListPost('{{path('_enviar_lista_lideres_cell')}}','ids',rede);
+                            break;
+                    }        
+                            
+                }
+                function change_tipo()
+                {
+                    var valor = $('#tip_red').val();
+                    listas(parseInt(valor));
+                }
+            
+                function change_red()
+                {
+                    
+                    if($('#red_lista option:selected').val()!='-1')
+                    {
+                        $('#lider_block').css({"display":"block"});
+                                            change_tipo();
+
+                    }
+                    else $('#lider_block').css({"display":"none"});
+
+                }
+               $(document).ready(function(){
+               
+                  
+                    $("#lider_block").css({"display":"none"});
+                    $("#tip_red").change(change_tipo);
+                    $("#red_lista").change(change_red);
+                   //lista de iglesias
+                        $.ajax(
+                        {url : '{{path('servicio_iglesia')}}',
+                         dataType:"json",
+                        type: "POST",
+                        async: false,
+                        }
+                        ).done(iglesias);
+                 
+           
+                      var rede = '{{red}}';
+                      
+                      if(rede.length>0)
+                      {
+                          $("<option value='"+rede+"'>"+rede+"</option>").appendTo('#red_lista');
+                          change_red();
+                      }
+                      else
+                      {  //lista de redes
+                        initRed('{{path('servicio_red_sin')}}');
+                      }
+
+                        //lista de departamentos
+                        initDepartamentos('{{path('servicio_region')}}'); 
+ 
+                        //lista de lugares
+                        initLugar('{{path('servicio_lugar')}}');
+            
+                    
+                    var x =$("login");
+                    x.click();
+           
+                    $("#myForm").submit(function(){
+                    //get the url for the form
+                    var url=$("#myForm").attr("action");
+   
+                    //start send the post request
+                    
+                    $.post(url,{
+                        formName:$("#myForm").serialize(),
+                        other:"attributes"
+                    },function(data){
+                    //the response is in the data variable
+                                       
+                    if(data.responseCode==200 ){           
+                       // $('#output').html(data.greeting);
+                        //$('#output').css("color","red");
+                        alert('Registro Completado');
+                        location.reload();
+                    }
+                    else if(data.responseCode===400){//bad request
+                       // $('#output').html(data.greeting);
+                       // $('#output').css("color","red");
+                       alert('Error');
+                        }
+                    else{
+                        
+                        if(data.responseCode===500)
+                        {
+                            alert('Solo se puede registrar una iglesia');
+                        }
+                      
+                        else alert("An unexpeded error occured.");
+
+                        }
+                    }       
+                    );
+                    return false;});                    
+                    mapeo_position('lat','lng','addresspicker_map','map');     
+            });
+
+                function iglesias(datos)
+                {
+                    {
+                        $('<option value='+datos.id+'>'+datos.nombre+'</option>').appendTo('#iglesia_lista');
+                    } 
+                }
+   
+            function recargar_celula()
+            {
+                var nombre = $("#red_lista option:selected").val();  
+            
+                 var route = '{{path('servicio_celula',{'id': 'name'})}}';
+            
+                 var rutas = route.replace('name',nombre);
+         
+                 $.ajax(
+                        {url : rutas,
+                         dataType:"json",
+                        type: "POST",
+                        async: false,
+                        }
+                        ).done(celula);     
+            }
+                     
+                function recarga_provincias()
+                {
+                 var id = $("#departamento_lista option:selected").val();              
+                 var route = '{{path('servicio_provincia',{'id': 'nom'})}}';            
+                 var rutas = route.replace('nom',id);         
+                 $.ajax(
+                        {   url : rutas,
+                            dataType:"json",
+                            type: "POST",
+                            async: false,
+                        }
+                    ).done(provincias);
+                }
+                            
+                function recarga_distritos()
+                {
+                    var dep=$("#departamento_lista option:selected").val();
+                    var prov = $("#provincia_lista option:selected").val();
+   
+                    var route = '{{path('servicio_distrito',{'dep':'id1','prov':'id2'})}}';
+                    
+                    var rutas = route.replace('id1', dep);                    
+                    rutas = rutas.replace('id2', prov);
+                    
+                     $.ajax(
+                        {   url : rutas,
+                            dataType:"json",
+                            type: "POST",
+                            async: false,
+                        }
+                    ).done(distrito);
+                }
+                
+            </script>            
+{%endblock%}

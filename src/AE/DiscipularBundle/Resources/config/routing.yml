@@ -1,0 +1,183 @@
+discipular_crearcurso:
+    pattern: /crearcurso
+    defaults: { _controller: AEDiscipularBundle:CrearCurso:index }
+    
+discipular_registrar_curso:
+    pattern:  /registrarcurso
+    defaults: { _controller: AEDiscipularBundle:CrearCurso:RegistrarCurso }
+    requirements:
+          _method: POST
+          
+discipular_desactivar_curso:
+    pattern:  /desactivarcurso
+    defaults: { _controller: AEDiscipularBundle:CrearCurso:DesactivarCurso }
+    requirements:
+          _method: POST
+          
+discipular_activar_curso:
+    pattern:  /activarcurso
+    defaults: { _controller: AEDiscipularBundle:CrearCurso:ActivarCurso }
+    requirements:
+          _method: POST
+
+discipular_administrar_personal:
+    pattern:  /administrar_personal
+    defaults: { _controller: AEDiscipularBundle:RegistrarPersonal:index }
+    
+discipular_registrar_personal:
+    pattern:  /registrarpersonal
+    defaults: { _controller: AEDiscipularBundle:RegistrarPersonal:RegistroPersonal }
+    requirements:
+          _method: POST
+          
+discipular_eliminar_personal:
+    pattern:  /eliminarpersonal
+    defaults: { _controller: AEDiscipularBundle:RegistrarPersonal:EliminarPersonal }
+    requirements:
+          _method: POST
+          
+discipular_desactivar_personal:
+    pattern:  /desactivarpersonal
+    defaults: { _controller: AEDiscipularBundle:RegistrarPersonal:DesactivarPersonal }
+    requirements:
+          _method: POST
+          
+discipular_activar_personal:
+    pattern:  /activarpersonal
+    defaults: { _controller: AEDiscipularBundle:RegistrarPersonal:ActivarPersonal }
+    requirements:
+          _method: POST
+          
+discipular_eliminar_estudiante:
+    pattern:  /eliminarestudiante
+    defaults: { _controller: AEDiscipularBundle:RegistrarEstudiante:EliminarEstudiante }
+    requirements:
+          _method: POST
+          
+discipular_desactivar_estudiante:
+    pattern:  /desactivarestudiante
+    defaults: { _controller: AEDiscipularBundle:RegistrarEstudiante:DesactivarEstudiante }
+    requirements:
+          _method: POST
+          
+discipular_activar_estudiante:
+    pattern:  /activarestudiante
+    defaults: { _controller: AEDiscipularBundle:RegistrarEstudiante:ActivarEstudiante }
+    requirements:
+          _method: POST
+          
+discipular_asignar_curso:
+    pattern:  /asignarcurso
+    defaults: { _controller: AEDiscipularBundle:AsignarCurso:index }
+    
+discipular_registrar_asignacion:
+    pattern:  /registrar_asignacion
+    defaults: { _controller: AEDiscipularBundle:AsignarCurso:RegistrarAsignacion }
+    requirements:
+          _method: POST
+          
+discipular_cerrar_asignacion:
+    pattern:  /cerrar_asignacion
+    defaults: { _controller: AEDiscipularBundle:AsignarCurso:CerrarAsignacion }
+    requirements:
+          _method: POST
+    
+discipular_cerrar_matricula:
+    pattern:  /cerrar_matricula
+    defaults: { _controller: AEDiscipularBundle:AsignarCurso:CerrarMatricula }
+    requirements:
+          _method: POST
+          
+discipular_administrar_local:
+    pattern:  /administrar_local
+    defaults: { _controller: AEDiscipularBundle:AdministrarLocal:index }
+    
+discipular_registrar_local:
+    pattern:  /registrar_local
+    defaults: { _controller: AEDiscipularBundle:AdministrarLocal:RegistrarLocal }
+    requirements:
+          _method: POST
+          
+discipular_eliminar_asignacion:
+    pattern:  /eliminar_asignacion
+    defaults: { _controller: AEDiscipularBundle:AsignarCurso:EliminarAsignacion }
+    requirements:
+          _method: POST
+          
+discipular_curso:
+    pattern:  /curso
+    defaults: { _controller: AEDiscipularBundle:Curso:index }
+    
+discipular_temascurso:
+    pattern:  /temascurso
+    defaults: { _controller: AEDiscipularBundle:Temas:index }
+    
+discipular_administrar_estudiante:
+    pattern:  /administrar_estudiante
+    defaults: { _controller: AEDiscipularBundle:RegistrarEstudiante:index }
+    
+discipular_registrar_estudiante:
+    pattern:  /registrar_estudiante
+    defaults: { _controller: AEDiscipularBundle:RegistrarEstudiante:RegistrarEstudiante }
+    requirements:
+          _method: POST
+    
+discipular_matricular:
+    pattern:  /matricular
+    defaults: { _controller: AEDiscipularBundle:Matricular:index }
+    requirements:
+          _method: POST
+
+discipular_registrar_matricula:
+    pattern:  /registrar_matricula
+    defaults: { _controller: AEDiscipularBundle:Matricular:MatricularEstudiante }
+    requirements:
+          _method: POST
+          
+discipular_eliminar_matricula:
+    pattern:  /eliminar_matricula
+    defaults: { _controller: AEDiscipularBundle:Matricular:EliminarMatricula }
+    requirements:
+          _method: POST
+          
+discipular_clase:
+    pattern:  /clase
+    defaults: { _controller: AEDiscipularBundle:Clase:index }
+    requirements:
+          _method: POST
+    
+discipular_editar_asistencia:
+    pattern:  /editar_asistencia
+    defaults: { _controller: AEDiscipularBundle:Clase:ActualizarClase }
+    requirements:
+          _method: POST
+          
+discipular_lista_clases:
+    pattern:  /lista_clases
+    defaults: { _controller: AEDiscipularBundle:Clase:ListaClases }
+    requirements:
+          _method: POST
+          
+discipular_actualizar_fecha_clase:
+    pattern:  /actualizar_fecha_clase
+    defaults: { _controller: AEDiscipularBundle:Clase:ActualizarFechaClase }
+    requirements:
+          _method: POST
+          
+discipular_actualizar_ofrenda_clase:
+    pattern:  /actualizar_ofrenda_clase
+    defaults: { _controller: AEDiscipularBundle:Clase:ActualizarOfrendaClase }
+    requirements:
+          _method: POST
+          
+discipular_informe_vision:
+    pattern: /informe_vision
+    defaults: { _controller: AEDiscipularBundle:Informe:InformeVision }
+    
+discipular_informe_asistenciaredes:
+    pattern: /informe_asistenciaredes
+    defaults: { _controller: AEDiscipularBundle:Informe:InformeCursoRedes }
+    
+discipular_informe_semanal_indeli:
+    pattern: /informe_semanal_indeli
+    defaults: { _controller: AEDiscipularBundle:Informe:InformeSemanalIndeli }

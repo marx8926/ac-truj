@@ -1,0 +1,560 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Modificar Permisos - {% endblock %}
+        {% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+                 
+        <!-- Scripts -->
+                 
+        {% endblock %}
+        
+{% block content %}
+
+      <div class="span9" id="registro_form">
+            
+       <h1>Todos los Miembros</h1>
+	<div class="box">
+		<div class="box-head tabs">
+            <h3>Miembros</h3>							
+        </div>
+
+        <div class="box-content box-nomargin">
+        	<form id='form' method='POST'>
+                <input id='content' type='hidden' name='content' >
+                <input id='title' type='hidden' name='title' >
+				<input id='pdfbutton' type='button' value='PDF' class="btn btn-info">
+				<input id='excelbutton' type='button' value='Excel' class="btn btn-info">
+    <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped dataTable table-bordered"  id="persona" name="persona">
+        <thead>
+            <tr>
+                <th>ID</th>
+		<th>Nombres</th>
+		<th>Apellidos</th>
+		<th>Edad</th>
+                <th>Red</th>
+                <th>Celula</th>
+		<th>Conversión</th>
+            </tr>
+	</thead>
+	<tbody id="tablas1" name="tablas1" >
+	
+	</tbody>
+	
+    </table>
+    </form>
+    	</div>
+	
+            
+          <fieldset>  
+                  <legend>Modificar Permisos</legend>
+                  
+                  
+          <form id="myForm" name="myForm" class="form-horizontal"  method="POST" action="{{path('administrar_mod_permiso_update')}}" >
+         
+              
+                  
+                  <div class="control-group">
+                    <label class="control-label" >ID</label>
+                    <div class="controls">
+                      <input class="input-large" type="text" name="code" id="code" pattern="|^\d+$|" autofocus="true" required/>
+                      <input class="btn btn-primary" type="button" name="load" id="load" value="Cargar"  onclick="cargar();"/>
+                    </div>
+                  </div>
+              
+                  <div class="control-group">
+                      <label class="control-label"></label>
+                      <div class="controls" id="divusuario">
+                        <label class="checkbox">
+                            <input type="checkbox" name="usuario" id="usuario" value="usuario"> Usuario
+                        </label>
+                      </div>
+                   </div>
+              
+              
+                  <div class="control-group">
+                      <label class="control-label"></label>
+                      <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="celula" id="celula" value="celula"> Lider de Célula
+                        </label>
+                      </div>
+                   </div>
+              
+                  <div class="control-group">
+                      <label class="control-label"></label>
+                      <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="consolidador" id="consolidador" value="consolidador">Consolidador
+                        </label>
+                       </div>
+                  </div>
+                  
+              <div class="control-group">
+                       <label class="control-label"></label>
+
+                      <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="estudiante" id="estudiante" value="estudiante">Estudiante                          
+                        </label>
+                      </div>
+                  </div>
+              
+               <div class="control-group">
+                       <label class="control-label"></label>
+
+                      <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="docente" id="docente" value="docente">Docente                          
+                        </label>
+                      </div>
+                  </div>
+              
+              <div class="control-group">
+                      <label class="control-label"></label>
+
+                      <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" name="misionero" id="misionero" value="misionero"> Misionero
+                            </label>
+                      </div>
+                  </div>
+              
+                  <div class="control-group">
+                      <label class="control-label"></label>
+                      <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="lider_red" id="lider_red" value="lider_red"> Lider de Red
+                        </label>
+                       </div>
+                  </div>
+              
+                  <div class="control-group">
+                      <label class="control-label"></label>
+
+                      <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" name="ganar" id="ganar" value="ganar"> Encargado de Ganar
+                            </label>
+                      </div>
+                  </div>
+                  
+                  <div class="control-group">
+                      <label class="control-label"></label>
+
+                      <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" name="consolidar" id="consolidar" value="consolidar"> Encargado de Consolidar
+                            </label>
+                      </div>
+                  </div>
+              
+              <div class="control-group">
+                      <label class="control-label"></label>
+
+                      <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" name="discipular" id="discipular" value="discipular"> Encargado de Discipular
+                            </label>
+                      </div>
+                  </div>
+              
+              <div class="control-group">
+                      <label class="control-label"></label>
+
+                      <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" name="enviar" id="enviar" value="enviar"> Encargado de Enviar
+                            </label>
+                      </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label"></label>
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="pastor_asoc" id="pastor_asoc" value="pastor_asoc"> Pastor Asociado
+                        </label>
+                    </div>
+                  </div>
+                                                  
+                  
+                  <div class="control-group">
+                  
+                      <label class="control-label"></label>
+                      <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="pastor_eje" id="pastor_eje" value="pastor_eje"> Pastor Ejecutivo
+                        </label>
+                      </div>
+                  </div>
+                  
+                  <div class="control-group">
+                  
+                      <label class="control-label"></label>
+                      <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" name="admin" id="admin" value="admin"> Administrador
+                        </label>
+                      </div>
+                  </div>
+              
+              <div id="usuariodiv">
+                   <fieldset>
+                <legend>Usuario</legend>
+                <div class="control-group">
+                    <label class="control-label" >Usuario</label>
+                    <div class="controls">
+                        <input type="text" id="inputUsuario" name="inputUsuario" placeholder="Usuario" class="input-xlarge" pattern="|^[a-zA-Z0-9]+$|" />
+                        <p class="help-block" id="disponible" name="disponible" >Disponible</p>
+
+                    </div>
+                </div>
+               
+                <div class="control-group">     
+                    <label class="control-label" >Contraseña</label>      
+                    <div class="controls">
+                        <input type="password" id="inputPassword" name="inputPassword" placeholder="Contraseña" class="input-xlarge">      
+                    </div>
+                </div>
+          
+                
+            </fieldset>
+              </div>     
+          
+              <div class="control-group">
+                  <label class="control-label"></label>
+                  <div class="controls">
+                      <input class="btn btn-small btn-primary" type="submit" name="login" title="Guardar" value="Guardar" />
+                  </div>
+              </div>
+              
+        </form>
+                
+       </fieldset>
+              
+        
+
+</div>
+{% endblock %}
+      
+               
+      {%block javascript %}
+      <script src="{{asset('js/jquery.js')}}"></script>
+	<script src="{{asset('js/less.js')}}"></script>
+	<script src="{{asset('js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+	<script src="{{asset('js/bootstrap.js')}}"></script>
+	<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+	<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+	<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+	<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+	<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+	<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+	<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+	<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+	<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+	<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+	<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+	<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+	<script src="{{asset('js/ui.spinner.js')}}"></script>
+	<script src="{{asset('js/custom.js')}}"></script>
+        <script src="{{asset('js/tablasfeatures.js')}}"></script>
+            
+    <script src="http://www.google.com/jsapi"></script>
+	<!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->              
+    <script type="text/javascript" charset="utf-8" language="javascript" src="{{asset('js/DT_bootstrap.js')}}"> </script>
+            
+      
+      <script type="text/javascript">
+          
+    
+        function permiso(dato)
+        {
+            
+            
+            
+           // if(dato.ROLE_USER === true)
+             //   $('#usuario').attr('checked',true);
+            
+            if(dato.ROLE_LIDER === true || dato.ROLE_LIDERSIN === true || dato.ROLE_LIDER12 === true
+         || dato.ROLE_LIDER144 === true || dato.ROLE_LIDER1728 === true)
+                $('#celula').attr('checked', true); 
+
+            if(dato.ROLE_LIDER_RED === true)
+                $('#lider_red').attr('checked', true); 
+
+            if(dato.ROLE_MISIONERO === true)
+                $('#misionero').attr('checked', true); 
+
+            if(dato.ROLE_PASTOR_EJECUTIVO === true)
+                $('#pastor_eje').attr('checked', true); 
+
+                
+            if(dato.ROLE_PASTOR_ASOCIADO === true)
+                $('#pastor_asoc').attr('checked', true); 
+
+                
+            if(dato.ROLE_GANAR === true)
+                $('#ganar').attr('checked', true); 
+            
+            if(dato.ROLE_CONSOLIDAR === true)
+                $('#consolidar').attr('checked', true); 
+                
+            if(dato.ROLE_DISCIPULAR === true)
+                $('#discipular').attr('checked', true); 
+                
+            if(dato.ROLE_ESTUDIANTE === true)
+               $('#estudiante').attr('checked', true); 
+           
+            //if(dato.ROLE_PROFESOR === TRUE)
+                
+            
+            if(dato.ROLE_ENVIAR === true)
+                $('#enviar').attr('checked', true); 
+
+                
+            if(dato.ROLE_CONSOLIDADOR=== true)                
+                $('#consolidador').attr('checked', true); 
+
+           if(dato.ROLE_ADMIN=== true)                
+                $('#admin').attr('checked', true); 
+        }
+        
+        //recuperar los datos
+        function user(dato)
+        {
+            if(dato!==false)
+            {
+                      $('#usuariodiv') .css({'display':'none'});                      
+                      $('#divusuario').css({'display':'none'});  
+                      
+                      
+            }
+            else {     
+                $('#usuariodiv') .css({'display':'block'});
+                $('#divusuario').css({'display':'none'});
+                $('#usuario').attr('checked', true); 
+            
+                $('#inputUsuario').attr('required',true);
+                $('#inputPassowrd').attr('required',true);
+
+            }
+
+        }
+        function cargar()
+        {
+                var id = $("#code").val();
+
+                 var route = '{{path('servicio_permiso_id',{'id': 'nom'})}}';            
+                 var rutas = route.replace('nom',id); 
+                 
+                 if(id.length > 0)   
+                 {
+                     
+                 
+                    $.ajax(
+                        {   url : rutas,
+                            dataType:"json",
+                            type: "POST",
+                            async: false,
+                        }
+                    ).done(permiso);
+                        
+                  //carga datos de usuario
+                                   
+                    var url = '{{path('servicio_usuario_id',{'id':'cod'}) }}';
+                    var ruta = url.replace('cod',id);
+                    $.ajax(
+                        {   url : ruta,
+                            dataType:"json",
+                            type: "POST",
+                            async: false,
+                        }
+                    ).done(user);
+               }
+                    
+        }
+       
+		
+	$(document).ready(function() {
+            
+            
+           $('#divusuario').css({'display':'none'});
+
+                     
+           $('#usuariodiv').css({'display':'none'});
+           
+           
+                 $("#guardar").css({'display':'none'});
+                
+                $("#inputUsuario").change(function(){
+                    
+                    var url = "{{path('administrar_check_user',{'user':'usr'})}}";
+                    url = url.replace('usr',$('#inputUsuario').val());
+                    
+                    var num = new Array();
+                    
+                     $.ajax(
+                        {url : url,
+                         dataType:"json",
+                        type: "POST",
+                        async: false,
+                        }
+                        ).done(function(data){
+                            num=data;    
+                        });
+                    
+                    if(num.length>0)
+                    {
+                          $('#disponible').text("No disponible");
+                    }
+                    else
+                    {
+                        $('#disponible').text("Disponible");
+                    }
+                    
+                   
+               });
+           
+           
+           	$("#pdfbutton").click(function(event) {
+            $("#persona th").css("width","auto");
+        	$("#content").val($("#persona").html());
+        	$("#title").val($("h3").html());
+        	//$("#content").val($("#lol").html() + $("tbody").html());
+                $("#form").attr("action", "{{asset('extensiones/exportpdf.php')}}");
+	 		$("#form").submit();
+            });
+
+            $("#excelbutton").click(function(event) {
+        	$("#content").val("<table>" + $("#persona").html() + "</table>");
+                $("#form").attr("action", "{{asset('extensiones/exportexcel.php')}}");
+                $("#form").submit();
+            });
+        
+             $('#persona tbody').click(function(event){
+                $(oTable.fnSettings().aoData).each(function(){
+                    $(this.nTr).removeClass('row_selected');
+                });
+                
+                $(event.target.parentNode).addClass('row_selected');
+                
+                trselected = $(event.target.parentNode);
+                
+                var tds = $(trselected).find('td');
+                
+                values = [];
+  
+                $.each(tds, function(index, item) {
+                    values.push(item.innerHTML); 
+                });  
+                
+                $("#code").val(values[0]);
+                
+                $('#divusuario').css({'display':'none'});
+                     
+                $('#usuariodiv').css({'display':'none'});
+                                              
+            });
+				
+           $("#myForm").submit(function(event){
+
+           event.preventDefault();
+            //get the url for the form
+            var url=$("#myForm").attr("action");
+            
+            $.post(url,{
+             formName:$("#myForm").serialize(),
+                other:"attributes"
+             },function(data){
+                    //the response is in the data variable
+
+               if(data.responseCode===200 ){           
+                      
+                 alert('Registro Completado');
+                 $('#divusuario').css({'display':'none'});
+                     
+                $('#usuariodiv').css({'display':'none'});
+                                              
+                   
+              //   $(location).attr('href',href); 
+          
+               }
+               else if(data.responseCode===400){//bad request
+                       alert('Error');
+                        }
+                    else{
+                        if(data.responseCode===500)
+                        {
+                            alert('Solo se puede registrar una iglesia');
+                        }
+                        //if we got to this point we know that the controller
+                        //did not return a json_encoded array. We can assume that           
+                        //an unexpected PHP error occured
+                        else 
+                            if(data.responseCode===600)
+                                alert('Ingrese su ID');
+                            else alert("An unexpeded error occured.");
+                   }
+             }
+             );
+
+            return false;});              
+            
+            get_tabla();
+        } );
+        
+         function get_tabla()
+         {
+             /* Build the DataTable with third column using our custom sort functions */
+            oTable = $('#persona').dataTable( {
+                                    
+            	"bProcessing": true,
+                "bServerSide": false,
+                "bDestroy": true,
+                "sAjaxSource": '{{path('servicio_miembro_all')}}',
+                "aoColumns": [
+                    { "mDataProp": "id" },
+                    { "mDataProp": "nombre" },
+                    { "mDataProp": "apellidos" },
+                    { "mDataProp": "edad" },
+                    { "mDataProp": "red" },
+                    { "mDataProp":"celula"},
+                    { "mDataProp": "fecha"}
+                ],
+		"aaSorting": [ [0,'asc'], [1,'asc'] ],
+		"aoColumnDefs": [
+                    { "sType": 'string-case', "aTargets": [ 2 ] }
+		],"sDom": 'T&lt;"clear"&gt;lfrtip',
+                "oTableTools": {
+			"sRowSelect": "single",
+                        "sSwfPath": "{{asset('js/tabletools/media/swf/copy_csv_xls_pdf.swf')}}",
+                        "fnRowSelected": function ( node ) {
+                            var s=$(node).children();
+                            alert("Selected Row : " + s[0]);
+                        },
+                        "aButtons": [
+				"copy",
+				"csv",
+				"xls",
+				{
+					"sExtends": "pdf",
+					"sPdfOrientation": "landscape",
+					"sPdfMessage": "Your custom message would go here."
+				},
+				"print"
+			]
+		},
+                "sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+					"sPaginationType": "bootstrap",
+					"oLanguage": {
+						"sLengthMenu": "_MENU_ registros por página"
+					}
+            } );	
+         }
+         
+
+       </script>
+      {%endblock %}

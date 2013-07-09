@@ -1,0 +1,206 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">             
+{% endblock %}
+
+{%block content %}   
+<div class="span9" >
+    <fieldset class="form-horizontal">
+        <legend>Datos</legend>
+        
+       <div class="control-group">
+            <label class="control-label">ID:</label>
+            <div class="controls">
+                <p style="margin-top: 5px;" id="code" name="code" >{{id}} </p>
+            </div>
+       </div>
+        
+       <div class="control-group">
+            <label class="control-label">Nombres:</label>
+            <div class="controls">
+                <p style="margin-top: 5px;" id="nombre" name="nombre" >{{nombre}}</p>
+            </div>
+       </div>
+        
+        <div class="control-group">
+            <label class="control-label">Apellidos:</label>
+            <div class="controls">
+                <p style="margin-top: 5px;" id="nombre" name="nombre" >{{apellidos}}</p>
+            </div>
+       </div>
+        
+       <div class="control-group">
+            <label class="control-label">Fecha Inicio:</label>
+            <div class="controls">
+                <p style="margin-top: 5px;" id="fecha_inicio" name="fecha_inicio" >{{inicio}}</p>
+            </div>
+       </div>
+        
+       <div class="control-group">
+            <label class="control-label">Fecha Fin:</label>
+            <div class="controls">
+                <p style="margin-top: 5px;" id="fecha_fin" name="fecha_fin" >{{fin}}</p>
+            </div>
+       </div>
+        
+       <div class="control-group">
+            <label class="control-label">Consolidador:</label>
+            <div class="controls">
+                <p style="margin-top: 5px;" id="consolidador" name="consolidador" ></p>
+            </div>
+       </div>
+        
+    </fieldset>
+        
+        <form method="POST" id="myForm" name="myForm" class="form-horizontal" action="{{path('consolidar_seguir_update')}}">
+
+    <fieldset>
+
+        <div class="box">
+            <div class="box-head tabs">
+                <h3>Temas</h3>	
+            </div>
+        
+        <div id="temas" name="temas" class="box-content  box-nomargin"> 
+        </div>
+        </div>
+                
+        <div class="control-group" >
+        	<input class="btn btn-primary" type="submit" name="login" title="Guardar" value="Guardar" />
+        </div>
+    </fieldset>
+   </form>
+
+</div>    
+     
+{% endblock %}
+      
+ {%block javascript %}
+ 	<script src="{{asset('js/jquery.js')}}"></script>
+			<script src="{{asset('js/less.js')}}"></script>
+			<script src="{{asset('js/bootstrap.min.js')}}"></script>
+			<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+			<script src="{{asset('js/bootstrap.js')}}"></script>
+			<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+			<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+			<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+			<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+			<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+			<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+			<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+			<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+			<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+			<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+			<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+			<script src="{{asset('js/ui.spinner.js')}}"></script>
+                        <script src="{{asset('js/jquery.jgrowl_minimized.js')}}"></script>
+                        <script src="{{asset('js/jquery.form.js')}}"></script>
+                        <script src="{{asset('js/jquery.validate.min.js')}}"></script>
+                        <script src="{{asset('js/bbq.js')}}"></script>
+                        <script src="{{asset('js/jquery-ui-1.8.22.custom.min.js')}}"></script>
+                        <script src="{{asset('js/jquery.form.wizard-min.js')}}"></script>
+			<script src="{{asset('js/custom.js')}}"></script>
+    <script src="https://www.google.com/jsapi"></script>
+
+    <!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->
+    <script type="text/javascript">
+
+        var code = {{id}};
+        var num_temas = 0;
+        
+        var ids = new Array();
+               
+        
+        function tema(id)
+        {
+             var route = '{{path('servicio_temas_id',{'cons': 'nom'})}}';
+   
+            var rutas = route.replace('nom',id);
+                   
+            $.ajax(
+                  {url : rutas,
+                  // dataType:"json",   
+                   type: "POST",
+                  async: false,
+                  }
+            ).done(function(data){
+                    $("#temas").html(data);
+            });
+        
+        }
+                   
+        function cargar_consolidador(dato)
+        {
+
+            $('#consolidador').val(dato.nombre+' '+dato.apellidos);
+            $('#consolidador').text(dato.nombre+' '+dato.apellidos);
+
+        }
+
+        function consolidador(id)
+        {
+            //ruta de consolidador
+             var route = '{{path('servicio_consolidador_id',{'id': 'nom'})}}';
+   
+            var rutas = route.replace('nom',id);
+                   
+            $.ajax(
+                  {url : rutas,
+                   dataType:"json",   
+                   type: "POST",
+                  async: false,
+                  }
+            ).done(cargar_consolidador);
+        }
+        
+	$(document).ready(function() {
+
+            tema({{code}});
+            consolidador({{consolidador}});
+            $("#myForm").submit(function(){
+            //get the url for the form
+            var url=$("#myForm").attr("action");
+      
+            $.post(url,{
+             formName:$("#myForm").serialize(),
+                other:"attributes",
+                num: $("#numero").val(),
+                consol: {{code}}
+             },function(data){
+                    //the response is in the data variable
+              if(data.responseCode==200 ){           
+                      
+                 alert('Registro Completado');
+                 window.close();
+          
+               }
+               else if(data.responseCode==400){//bad request
+                       alert('Error');
+                        }
+                    else{
+                        if(data.responseCode==500)
+                        {
+                            alert('Solo se puede registrar una iglesia');
+                        }
+                        //if we got to this point we know that the controller
+                        //did not return a json_encoded array. We can assume that           
+                        //an unexpected PHP error occured
+                        else 
+                            if(data.responseCode==600)
+                                alert('Ingrese su ID');
+                            else alert("An unexpeded error occured.");
+                   }
+             }
+             );
+
+            return false;}); 
+	 });
+         
+            
+       </script>
+{%endblock %}

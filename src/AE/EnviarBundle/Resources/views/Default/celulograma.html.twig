@@ -1,0 +1,277 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Celulograma - {% endblock %}
+
+{% block stylesheets %}
+	<link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{{asset('css/DT_bootstrap.css')}}">
+        <link rel="stylesheet" href="{{asset('css/bootstrap.datepicker.css')}}">
+
+    <style>
+    	.encurso{
+    		color: #008500;
+    	}
+    	.cerrado{
+    		color: #fb000d;
+    	}
+	</style>
+{% endblock %}
+
+{%block javascript %}
+  	<script src="{{asset('js/jquery.js')}}"></script>
+	<script src="{{asset('js/less.js')}}"></script>
+	<script src="{{asset('js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+	<script src="{{asset('js/bootstrap.js')}}"></script>
+	<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+	<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+	<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+	<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+	<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+	<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+	<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+	<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+	<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+	<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+	<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+	<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+	<script src="{{asset('js/ui.spinner.js')}}"></script>
+	<script src="{{asset('js/custom.js')}}"></script>			
+	<script src="{{asset('js/functiongen.js')}}"></script>
+        <script src="{{asset('js/tiempo.js')}}"></script>
+        <script src="{{asset('js/ganar.js')}}"></script>
+            
+    <script type="text/javascript">
+        
+            var logg = function(data)
+            {
+                console.log(data);
+            }
+            $(document).ready(function() {
+            	 
+                FechaActualT('inputFechaConversion');
+                
+                //init red
+                  initRed('{{path('servicio_red')}}');
+                  
+               $("#tipo_celula").change(recargar_celula);               
+               
+               
+               
+               $('#myForm').submit(function(event){
+                   event.preventDefault();
+                   
+                   var date1 =  $("#inputFechaConversion").val().split('/');
+                   var fecha1 = date1[2] + '-' + date1[1] + '-' + date1[0];
+                   
+                   var url = "{{path('servicio_asistencia_celula',{'id':':cel','inicio':':init'})}}";
+                   url = url.replace(':cel',$("#celula_lista option:selected").val());
+                   url = url.replace(':init',fecha1);
+                   
+                   
+                   var url_i = "{{path('servicio_informacion_celula',{'id':':cel','ini':':init'})}}";
+                   url_i = url_i.replace(':cel',$("#celula_lista option:selected").val());
+                   url_i = url_i.replace(':init',fecha1);
+                   
+                   var url_o = "{{path('servicio_ofrenda_celula',{'id':':cel','inicio':':init'})}}";
+                   url_o = url_o.replace(':cel',$("#celula_lista option:selected").val());
+                   url_o = url_o.replace(':init',fecha1);
+                                                         
+                   if($("#celula_lista option:selected").val()!=='-1')
+                   {
+                    $.ajax(
+                    {url : url,
+                    type: "POST",
+                    async: false
+                        }
+                    ).done(function(dato){
+                        $('#crecer').html(dato);
+                    }); 
+                    
+                    $.ajax(
+                    {url : url_i,
+                    type: "POST",
+                    async: false
+                        }
+                    ).done(function(dato){
+                        $('#head_crecer').html(dato);
+                    });
+                    
+                     $.ajax(
+                    {url : url_o,
+                    type: "POST",
+                    async: false
+                        }
+                    ).done(function(dato){
+                             $('#ofrenda').html(dato);
+  
+                    });
+                   }
+                    
+            
+               });
+               
+               
+                $("#pdfbutton").click(function(event) {
+                $("#persona th").css("width","auto");
+            	$("#content").val($("#todo").html());
+            	$("#title").val($("h3").html());
+            	//$("#content").val($("#lol").html() + $("tbody").html());
+                $("#form").attr("action", "{{asset('extensiones/exportpdf.php')}}");
+		 		$("#form").submit();
+                });
+
+                $("#excelbutton").click(function(event) {
+            	$("#content").val( $("#todo").html());
+		$("#form").attr("action", "{{asset('extensiones/exportexcel.php')}}");
+		$("#form").submit();
+                });
+               
+            });   
+            
+        function celula_listar()
+        {
+            var tipo = $("#tipo_celula option:selected").val();
+            var nombre = $("#red_lista option:selected").val();  
+            
+            if(tipo==='0')
+            {
+                var route = '{{path('servicio_celula',{'id': 'name'})}}';
+            
+                        var rutas = route.replace('name',nombre);
+                 
+                        $.ajax(
+                        {url : rutas,
+                         dataType:"json",
+                        type: "POST",
+                        async: false,
+                        }
+                        ).done(celula);          
+            }
+            else
+            {
+               var route = '{{path('servicio_enviar_celula_discipulado',{'red': 'name'})}}';
+            
+                        var rutas = route.replace('name',nombre);
+                 
+                        $.ajax(
+                        {url : rutas,
+                         dataType:"json",
+                        type: "POST",
+                        async: false,
+                        }
+                        ).done(celula);                  
+            }                 
+        }
+           
+        function recargar_celula()
+        {
+                    var nombre = $("#red_lista option:selected").val();  
+                    if(nombre!=='-1')
+                       celula_listar();
+                    else {
+                        $('#celula_lista').empty();                             
+                            $("<option value='-1'>Sin Célula </option>").appendTo('#celula_lista');
+
+                    }
+        }
+    </script>             
+{%endblock%}
+
+{% block content %}
+<div class="row-fluid">
+    <div  class="span12">
+    	<h1>Celulograma</h1>
+    	<br />
+        <div id="registro_form">
+
+            <div class="form-horizontal">
+                
+                <form method="POST" id="myForm" name="myForm" >
+            
+                <div class="control-group">
+                    <label class="control-label">Red</label>
+                    <div class="controls">
+                        <select id="red_lista" name="red_lista" >
+                   
+                        </select>
+                    </div>
+                </div>
+                    
+                <div class="control-group">
+                    <label class="control-label" >Tipo Célula</label>
+                    <div class="controls">
+                        <select id="tipo_celula" name="tipo_celula" >
+                            <option value="0" >Evangelistica</option>
+                            <option value="1">Discipulado</option>
+                        </select>
+                    </div>
+                </div>
+       
+                <div class="control-group">
+                    <label class="control-label">Célula</label>
+                    <div class="controls">
+                        <select id="celula_lista" name="celula_lista" >
+                   
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">Fecha</label>
+                    <div class="controls">
+                        <input type= "text" class="datepick" id="inputFechaConversion" name="inputFechaConversion" required/>
+                        <p class="help-block">Día/Mes/Año</p>  
+                    </div>
+                </div>
+                    
+                <div class="control-group">                    
+                    <div class="controls">
+                        <input class="btn btn-primary" type="submit" id="login" name="login" value="Consultar" />
+                    </div>
+                </div>
+                    
+                </form>
+                
+                <div>
+                    
+                    <div class="box">
+		<div class="box-head tabs">
+            <h3>Celulograma</h3>	
+                </div>
+       
+
+ 
+            <form id='form' method='POST'>
+                
+                    <input id='content' type='hidden' name='content' >
+                    <input id='title' type='hidden' name='title' >
+                    <input id='pdfbutton' type='button' value='PDF' class="btn btn-info">
+                    <input id='excelbutton' type='button' value='Excel' class="btn btn-info">
+                </form> 
+            <div id="todo" class="box-content box-nomargin">
+                
+                    <div id="head_crecer">
+            
+            
+                    </div>
+            
+                    <div id="crecer">
+
+                    </div>
+            
+                    <div id="ofrenda">
+            
+                    </div>
+            </div>
+                   
+        </div>
+                 
+        </div>
+        </div>
+	</div>
+</div>
+</div>
+{% endblock %}

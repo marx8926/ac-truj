@@ -1,0 +1,382 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Asignar Consolidador - {% endblock %}
+        
+{% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{{asset('css/DT_bootstrap.css')}}"> 
+        <link rel="stylesheet" href="{{asset('css/bootstrap.datepicker.css')}}"> 
+{% endblock %}
+
+{%block content %}    
+<div class="span9" >
+<h1>Asignar Consolidador</h1>
+<div class="box">
+		<div class="box-head tabs">
+            <h3>Consolidados</h3>						
+        </div>
+
+        <div class="box-content box-nomargin">
+        	<form id='form' method='POST'>
+                
+                    <input id='content' type='hidden' name='content' >
+                    <input id='title' type='hidden' name='title' >
+                    <input id='pdfbutton' type='button' value='PDF' class="btn btn-info">
+                    <input id='excelbutton' type='button' value='Excel' class="btn btn-info">
+    <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped dataTable table-bordered"  id="persona" name="persona">
+        <thead>
+            <tr>
+                <th>ID</th>
+		<th>Nombres</th>
+		<th>Apellidos</th>
+		<th>Edad</th>
+		<th>Red</th>
+                <th>Célula</th>
+                <th>Conversión</th>
+                <th>Ganado por</th>
+            </tr>
+	</thead>
+	<tbody id="tablas1" name="tablas1" >
+	
+	</tbody>
+	
+    </table>
+    </form>
+        </div>
+        </div>   
+        <br>
+        <form id="registro" name="registro" class="form-horizontal" method="POST" action="{{path('consolidar_registrar_asignacion')}}">
+            <legend>Nuevo</legend>
+            <div class="control-group ">
+                    <div class="controls-row">
+                        <label class="control-label" id="code" name="code" ></label>
+                        
+                        <label class="control-label" id="nuevo" name="nuevo"  ></label>
+                        
+                        <input type="hidden" class="datepick" id="hasta" name="hasta">
+                    </div>
+            </div>
+            
+            <div class="control-group">
+            <label class="control-label" >Red</label>
+            <div class="controls">
+                <select id="red_lista" name="red_lista" class='rango' >
+                   
+                </select>
+            </div>
+            </div>
+
+            <div class="control-group ">
+                <label class="control-label" for="consolidador"> Consolidadores</label>
+                    <div class="controls">
+                        <select id="select_consolidador" name="select_consolidador" class='rango'>
+                                             
+                        </select>
+                    </div>
+            </div>
+                
+            <div class="control-group ">
+                <label class="control-label" for="consolidador"> Leche Espiritual</label>
+                    <div class="controls">
+                        <select id="select_leche" name="select_leche" class='rango' >
+                                             
+                        </select>
+                    </div>
+            </div>
+            
+            <div id="temas" name="temas">
+         
+          
+           </div>
+
+       </form>
+
+ </div>    
+{%endblock%}
+      
+ {%block javascript %}
+ 
+ 	<script src="{{asset('js/jquery.js')}}"></script>
+	<script src="{{asset('js/less.js')}}"></script>
+	<script src="{{asset('js/bootstrap.min.js')}}"></script>
+	<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+	<script src="{{asset('js/bootstrap.js')}}"></script>
+	<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+	<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+	<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+	<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+	<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+	<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+	<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+	<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+	<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+	<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+	<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+	<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+	<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+	<script src="{{asset('js/ui.spinner.js')}}"></script>
+	<script src="{{asset('js/custom.js')}}"></script>			
+	<script src="{{asset('js/functiongen.js')}}"></script>
+        <script src="{{asset('js/tiempo.js')}}"></script>
+        <script src="{{asset('js/tablasfeatures.js')}}"></script>
+        <script src="{{asset('js/ganar.js')}}"></script>
+        <script src="{{asset('js/datatable_plugins.js')}}"></script>
+
+            <!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->              
+            <script type="text/javascript" charset="utf-8" language="javascript" src="{{asset('js/DT_bootstrap.js')}}"> </script>
+           
+    <script type="text/javascript">
+
+         var trselected; 
+	 var oTable;
+         
+        var values = [];
+        
+        var num = 0; //numero de temas de leche esperitual
+        
+        function recargar_consolidadores()
+        {
+                var nombre = $("#red_lista option:selected").val();  
+            
+                 var route = '{{path('servicio_consolidadores_act_red',{'id': 'name'})}}';
+            
+                 var rutas = route.replace('name',nombre);
+                 
+                 init_consolidadores(rutas);        
+                 
+                 // tablas
+                 
+                 var url = '{{path('servicio_nuevo_convertido_all_ganador_red_tiempo_sin',{'red':':net','inicio':':ini','fin':':fin'})}}';
+                 
+                 var date2 =  $("#hasta").val().split('/');
+                 var hasta = date2[2] + '-' + date2[1] + '-' + date2[0];
+                 var desde = '1970-01-01';
+                 if(nombre!='-1')
+                 {
+                         url = url.replace(':net',nombre);
+                         url = url.replace(':ini',desde);
+                         url = url.replace(':fin',hasta);
+                 }
+                 else
+                 {
+                     url = '{{path('servicio_nuevo_convertido_all_ganador_tiempo_sin',{'inicio':':ini','fin':':fin'})}}';
+ 
+                     url = url.replace(':ini',desde);
+                     url = url.replace(':fin',hasta);
+                
+                 }
+                                  
+                 get_tabla(url);
+
+        }
+        
+        function miembro(dato)
+        {
+            var leche = $("#select_leche option:selected").val(); 
+            var red = $("#red_lista option:selected").val();  
+            var consolidador = $('#select_consolidador option:selected').val();
+
+
+            if(leche!='-1'&& red!='-1' && consolidador!='-1')
+            {
+            $('#code').text(dato[0]); $('#code').val(dato[0]);
+            $('#nuevo').text(dato[1]+' '+dato[2]);
+            
+              cargar_data();
+            }
+        }
+       
+        function cambio_leche()
+        {
+            var nombre = $("#select_leche option:selected").val();  
+            var leche = $("#select_leche option:selected").val(); 
+            var red = $("#red_lista option:selected").val(); 
+            
+            
+            if(nombre != '-1' && leche!='-1' && red!='-1')
+            {
+                var route = '{{path('servicio_leche_esp_temas',{'id': 'name'})}}';
+            
+                var rutas = route.replace('name',nombre);
+                
+                $.ajax(
+                        {url : rutas,
+                        type: "POST",
+                        async: false,
+                        }
+                  ).done(function(data){
+                          $('#temas').html(data);
+                  });
+            }
+            else $('#temas').empty();
+
+        }
+        
+        function recargar_celula()
+        {
+
+        }
+        
+        function clickeo(event)
+        {
+            
+                $(oTable.fnSettings().aoData).each(function(){
+                    $(this.nTr).removeClass('row_selected');
+                });
+                
+                $(event.target.parentNode).addClass('row_selected');
+                
+                trselected = $(event.target.parentNode);
+                
+                var tds = $(trselected).find('td');
+                values = [];
+  
+                $.each(tds, function(index, item) {
+                    values.push(item.innerHTML); 
+                });        
+                 //desbloquear div temas
+                $('#temas').css({'display':'block'});
+                miembro(values);
+            
+        }
+	$(document).ready(function() {
+          
+            var rede = '{{red}}' ;
+            FechaActualT('hasta');
+
+            
+            if(rede.length > 0)
+            {
+                 $("<option value='"+rede+"'>"+rede+"</option>").appendTo('#red_lista');
+            }
+            else
+                initRed('{{path('servicio_red_sin')}}');
+            
+           
+
+            init_leche_espiritual("{{path('servicio_leche_espiritual')}}");
+            
+            //bloquear div temas
+            $('#temas').css({'display':'none'});
+            
+            
+            //cambio de consolidadores
+            $('#red_lista').change(recargar_consolidadores);
+            
+             //cambio de leche espiritual
+             $('#select_leche').change(cambio_leche);
+
+             $("#pdfbutton").click(function(event) {
+                 $("#persona th").css("width","auto");
+             	$("#content").val($("#persona").html());
+             	$("#title").val($("h3").html());
+             	//$("#content").val($("#lol").html() + $("tbody").html());
+                 $("#form").attr("action", "{{asset('extensiones/exportpdf.php')}}");
+     	 		$("#form").submit();
+             });
+
+             $("#excelbutton").click(function(event) {
+             	$("#content").val("<table>" + $("#persona").html() + "</table>");
+                $("#form").attr("action", "{{asset('extensiones/exportexcel.php')}}");
+                $("#form").submit();
+             });
+            
+            $('#persona tbody').click(clickeo);
+            
+            $("#registro").submit(function(event){
+                    event.preventDefault();
+                             
+                    //get the url for the form
+                    var url=$("#registro").attr("action");
+
+                    $.post(url,{
+                        formName:$("#registro").serialize(),
+                        other:"attributes",
+                        id: $('#code').text(),
+                        num: $('#numero').val()
+                    },function(data){
+
+                    
+                    //the response is in the data variable
+                    if(data.responseCode===200 ){                                 
+                        alert('Registro Completado');
+                        oTable.fnReloadAjax();
+                        
+                        $('#code').text("");
+                        $('#nuevo').text("");
+                        $('#temas').html(null);
+                    }
+                    else if(data.responseCode===400)//bad request
+                       alert('Error bad request');
+                    else{                        
+                        if(data.responseCode===500)
+                            alert('Error bad request');
+                        else alert("An unexpeded error occured.");
+                        }
+                    }
+                    );
+                    
+                    return false;
+            });
+          
+            $('.rango').change(cargar_data);
+	 });
+         
+         function cargar_data()
+         {
+              var nombre = $("#select_leche option:selected").val();  
+            var leche = $("#select_leche option:selected").val(); 
+            var red = $("#red_lista option:selected").val(); 
+            
+            
+            if(nombre != '-1' && leche!='-1' && red!='-1')
+            {
+                    cambio_leche();
+            }
+            
+         }
+         function get_tabla(url)
+         {            
+              /* Build the DataTable with third column using our custom sort functions */
+            oTable = $('#persona').dataTable( {
+            	"bProcessing": true,
+                "bServerSide": false,
+                "bDestroy": true,
+                "sAjaxSource": url,
+                "aoColumns": [
+                    { "mDataProp": "id" },
+                    { "mDataProp": "nombre" },
+                    { "mDataProp": "apellidos" },
+                    { "mDataProp": "edad" },
+                    { "mDataProp": "red" },
+                    { "mDataProp": "celula"},
+                    { "mDataProp":"conversion"},
+                    { "mDataProp":"gnom"}
+                ],
+		"aaSorting": [ [6,'desc'], [4,'desc'],[5,'asc'] ],
+		"aoColumnDefs": [
+                    { "sType": 'string-case', "aTargets": [ 2 ] }
+		],
+                "sScrollY": "200px",
+                "bPaginate": false,
+                "bScrollCollapse": true,                
+                "sDom": 'T<"clear">lfrtip',
+                "oTableTools": {
+			"sRowSelect": "single",
+                        "fnRowSelected": function ( node ) {
+                            var s=$(node).children();
+                            alert("Selected Row : " + s[0]);
+                        }
+		},
+                "sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+					"sPaginationType": "bootstrap",
+					"oLanguage": {
+						"sLengthMenu": "_MENU_ registros por página"
+					}
+            } );	
+         }
+ 
+       </script>
+{%endblock %}

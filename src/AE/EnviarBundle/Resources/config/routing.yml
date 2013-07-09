@@ -1,0 +1,194 @@
+enviar_celula:
+  pattern: /celula
+  defaults: {_controller: AEEnviarBundle:Celula:celula}
+  
+enviar_addcelula:
+  pattern: /regcelula
+  defaults: {_controller: AEEnviarBundle:Celula:addcelula}
+  requirements:
+    _method: POST
+
+enviar_busqueda_celula:
+  pattern: /busqueda_celula
+  defaults: {_controller: AEEnviarBundle:Busqueda:busqueda_celula}
+
+enviar_modificar_celula:
+  pattern: /modificar_celula
+  defaults: {_controller: AEEnviarBundle:Modificar:modificar_celula}
+  requirements:
+    _method: POST
+    
+enviar_modificar_celula_update:
+  pattern: /modificar_celula_update
+  defaults: {_controller: AEEnviarBundle:Modificar:modificarCelulaUpdate}
+  requirements:
+    _method: POST
+    
+enviar_eliminar_celula:
+  pattern: /eliminar_celula
+  defaults: {_controller: AEEnviarBundle:Eliminar:eliminarCelula}
+  requirements:
+    _method: POST
+
+enviar_temacelula:
+  pattern: /temacelula
+  defaults: {_controller: AEEnviarBundle:Temas:temacelula}
+  
+enviar_temacelula_updated:
+  pattern: /temacelula_updated
+  defaults: {_controller: AEEnviarBundle:Temas:temacelula_updated}
+  requirements:
+    _method: POST
+
+enviar_lista_clases:
+  pattern: /lista_clases
+  defaults: {_controller: AEEnviarBundle:Clase:lista_clases}
+  
+enviar_lista_clases_descarga:
+  pattern: /lista_clases_descarga
+  defaults: {_controller: AEEnviarBundle:Clase:lista_clases_descarga}
+  requirements:
+    _method: POST
+    
+enviar_crear_class_cell:
+  pattern: /crear_class_cell
+  defaults: {_controller: AEEnviarBundle:Clase:crear_class_cell}
+
+enviar_crear_class_cell_update:
+  pattern: /crear_class_cell_update
+  defaults: {_controller: AEEnviarBundle:Clase:crear_class_cell_update}
+  requirements:
+    _method: POST
+  
+enviar_asistencia_celula:
+  pattern: /asistencia_celula
+  defaults: {_controller: AEEnviarBundle:Asistencia:asistencia_celula}
+  requirements:
+    _method: POST
+  
+enviar_asistencia_celula_update:
+  pattern: /asistencia_celula_update/{tipo}
+  defaults: {_controller: AEEnviarBundle:Asistencia:asistencia_celula_update}
+  requirements:
+    _method: POST
+    
+enviar_asistencia:
+  pattern: /asistencia
+  defaults: {_controller: AEEnviarBundle:Asistencia:asistencia}
+
+##enviar_redes:
+  #pattern: /redes
+  #defaults: {_controller: AEEnviarBundle:Default:red}  
+  
+#enviar_celulas_por_red:
+  #pattern: /celulas_por_red
+  #defaults: {_controller: AEEnviarBundle:Default:celulasbyred}  
+  
+enviar_lista_lideres:
+  pattern: /lista_lideres
+  defaults: {_controller: AEEnviarBundle:Lideres:lista_lideres}
+  
+  
+enviar_desactivar_celula:
+  pattern: /desactivar_celula
+  defaults: {_controller: AEEnviarBundle:Modificar:desactivar}
+  requirements:
+    _method: POST
+    
+enviar_activar_celula:
+  pattern: /activar_celula_up
+  defaults: {_controller: AEEnviarBundle:Modificar:activar}
+  requirements:
+    _method: POST
+    
+enviar_activar_vista:
+  pattern: /activar_celula
+  defaults: {_controller: AEEnviarBundle:Modificar:activar_celula}
+  
+  
+enviar_celulograma:
+  pattern: /celulograma
+  defaults: {_controller: AEEnviarBundle:Informe:celulograma}
+  
+enviar_celulograma12:
+  pattern: /celulograma12
+  defaults: {_controller: AEEnviarBundle:Informe:celulograma12}
+  
+enviar_celulograma144:
+  pattern: /celulograma144
+  defaults: {_controller: AEEnviarBundle:Informe:celulograma144}
+  
+enviar_celulograma1728:
+  pattern: /celulograma1728
+  defaults: {_controller: AEEnviarBundle:Informe:celulograma1728}
+  
+enviar_celulograma20378:
+  pattern: /celulograma20378
+  defaults: {_controller: AEEnviarBundle:Informe:celulograma20378}
+  
+enviar_celulograma_up:
+  pattern: /celulograma_up/{red}/{ini}
+  defaults: {_controller: AEEnviarBundle:Informe:celulogramaUp}
+  requirements:
+    _method: POST
+    
+enviar_informe_semanal:
+  pattern: /informe_semanal_cell
+  defaults: {_controller: AEEnviarBundle:Informe:informe_semanalvista}
+  
+  
+enviar_celulas_mentoreo:
+  pattern: /celulas_mentoreo
+  defaults: {_controller: AEEnviarBundle:Busqueda:celulas_mentoreo}
+  
+enviar_registro_discipulado:
+  pattern: /registro_discipulado
+  defaults: {_controller: AEEnviarBundle:Modificar:registro_discipulado}
+  
+enviar_registro_discipulado_up:
+  pattern: /registro_discipulado_up
+  defaults: {_controller: AEEnviarBundle:Modificar:registro_discipulado_up}
+  requirements:
+    _method: POST
+    
+enviar_actualizar_discipulado_up:
+  pattern: /actualizar_discipulado_up
+  defaults: {_controller: AEEnviarBundle:Modificar:actualizar_discipulado_up}
+  requirements:
+    _method: POST
+    
+enviar_discipulos_por_red:
+  pattern: /discipulos_por_red
+  defaults: {_controller: AEEnviarBundle:Informe:discipulos_por_red}
+  
+enviar_desactivar_discipulo:
+  pattern: /desactivar_discipulo
+  defaults: {_controller: AEEnviarBundle:Modificar:desactivar_discipulo}
+  requirements:
+    _method: POST
+    
+enviar_activar_discipulo:
+  pattern: /activar_discipulo
+  defaults: {_controller: AEEnviarBundle:Modificar:activar_discipulo}
+  requirements:
+    _method: POST
+    
+enviar_informe_red:
+  pattern: /enviar_informe_red
+  defaults: {_controller: AEEnviarBundle:Informe:informe_red}
+  
+enviar_informe_resumido:
+  pattern: /enviar_informe_resumido
+  defaults: {_controller: AEEnviarBundle:Informe:informe_resumido}
+  
+enviar_informe_lider12:
+  pattern: /enviar_informe_lider12
+  defaults: {_controller: AEEnviarBundle:Informe:informe_lider12}
+  
+enviar_informe_lider144:
+  pattern: /enviar_informe_lider144
+  defaults: {_controller: AEEnviarBundle:Informe:informe_lider144}
+  
+enviar_informe_lider1728:
+  pattern: /enviar_informe_lider1728
+  defaults: {_controller: AEEnviarBundle:Informe:informe_lider1728}

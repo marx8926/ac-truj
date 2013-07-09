@@ -1,0 +1,136 @@
+ae_consolidar_homepage:
+    pattern:  /hello/{name}
+    defaults: { _controller: AEConsolidarBundle:Default:index }
+
+consolidar_registro:
+  pattern: /registro
+  defaults: {_controller: AEConsolidarBundle:Registro:registro}
+  
+consolidar_registro_update:
+  pattern: /registroupdate/{id}
+  defaults: {_controller: AEConsolidarBundle:Registro:registroupdate}
+  requirements:
+    _method: POST
+    
+consolidar_modificar:
+  pattern: /modificar
+  defaults: {_controller: AEConsolidarBundle:Modificar:modificar}
+  
+consolidar_modificar_activar:
+  pattern: /modificar_activar/{id}
+  defaults: {_controller: AEConsolidarBundle:Modificar:modificar_activar}
+  requirements:
+    _method: POST
+  
+consolidar_modificar_desactivar:
+  pattern: /modificar_desactivar/{id}
+  defaults: {_controller: AEConsolidarBundle:Modificar:modificar_desactivar}
+  requirements:
+    _method: POST
+    
+consolidar_busqueda:
+  pattern: /busqueda
+  defaults: {_controller: AEConsolidarBundle:Busqueda:busqueda}
+
+  
+consolidar_asignar_consolidar:
+  pattern: /asignar_consolidar
+  defaults: {_controller: AEConsolidarBundle:Asignar:asignar_consolidar}
+  
+consolidar_registrar_asignacion:
+   pattern: /registrar_asignacion
+   defaults: {_controller: AEConsolidarBundle:Asignar:registrar_asignacion}
+   requirements:
+     _method: POST
+   
+consolidar_lista_consolidador:
+  pattern: /lista_consolidador
+  defaults: {_controller: AEConsolidarBundle:Vista:lista_consolidar}
+  
+consolidar_lista_consolidados:
+  pattern: /lista_consolidados
+  defaults: {_controller: AEConsolidarBundle:Vista:lista_consolidados}
+  
+consolidar_lista_seguir:
+  pattern: /lista_seguir
+  defaults: {_controller: AEConsolidarBundle:Seguir:lista_seguir}
+
+  
+consolidar_seguir:
+  pattern: /seguir/{id}
+  defaults: {_controller: AEConsolidarBundle:Seguir:seguir}
+  
+consolidar_seguir_update:
+  pattern: /seguir_update
+  defaults: {_controller: AEConsolidarBundle:Seguir:seguir_update}
+  requirements:
+    _method: POST
+ 
+consolidar_descartar:
+  pattern: /descartar
+  defaults: {_controller: AEConsolidarBundle:Descartar:descartar}
+  
+consolidar_descartar_update:
+  pattern: /descartar_update
+  defaults: {_controller: AEConsolidarBundle:Descartar:descartar_update}
+  requirements:
+    _method: POST
+    
+consolidar_lista_descartar:
+  pattern: /lista_descartar
+  defaults: {_controller: AEConsolidarBundle:Descartar:lista_descartar}
+  
+consolidar_activar_nuevo:
+  pattern: /activar_nuevo
+  defaults: {_controller: AEConsolidarBundle:Activar:activar_nuevo}
+  requirements:
+    _method: POST
+  
+consolidar_cambiar_consolidador:
+  pattern: /cambiar_consolidador
+  defaults: {_controller: AEConsolidarBundle:Cambiar:cambiar_consolidador}
+  
+consolidar_cambiar_consolidador_update:
+  pattern: /cambiar_consolidador_update
+  defaults: {_controller: AEConsolidarBundle:Cambiar:cambiar_consolidador_update}
+  requirements:
+    _method: POST
+
+consolidar_contacto:
+  pattern: /contacto
+  defaults: {_controller: AEConsolidarBundle:Contacto:contacto}
+  
+consolidar_contacto_herramienta:
+  pattern: /contactoherramienta
+  defaults: {_controller: AEConsolidarBundle:Contacto:contactoherramienta}
+  requirements:
+    _method: POST
+    
+    
+consolidar_informe_no_consolidado:
+  pattern: /informe_no_consolidado
+  defaults: {_controller: AEConsolidarBundle:Informes:informeNoconsolidado}
+  
+consolidar_informe_herramientas:
+  pattern: /informe_herramientas
+  defaults: {_controller: AEConsolidarBundle:Informes:informeHerramientas}
+  
+consolidar_informe_leche_espiritual:
+  pattern: /informe_leche_espiritual
+  defaults: {_controller: AEConsolidarBundle:Informes:informeLecheEspiritual}
+  
+consolidar_informe_descartados:
+  pattern: /informe_descartados
+  defaults: {_controller: AEConsolidarBundle:Informes:informeDescartados}
+  
+consolidado_informe_detallado:
+  pattern: /informe_detallado
+  defaults: {_controller: AEConsolidarBundle:Informes:informeDetallado}
+  
+consolidado_informe_resumido:
+  pattern: /informe_resumido
+  defaults: {_controller: AEConsolidarBundle:Informes:informeResumido}
+  
+consolidar_vista:
+  pattern: /vista/{id}
+  defaults: {_controller: AEConsolidarBundle:Vista:vista}

@@ -1,0 +1,286 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Registrar Curso - {% endblock %}
+
+  {% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+ {% endblock %}
+         
+  {%block javascript %}
+  	<script src="{{asset('js/jquery.js')}}"></script>
+			<script src="{{asset('js/less.js')}}"></script>
+			<script src="{{asset('js/bootstrap.min.js')}}"></script>
+			<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+			<script src="{{asset('js/bootstrap.js')}}"></script>
+			<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+			<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+			<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+			<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+			<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+			<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+			<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+			<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+			<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+			<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+			<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+			<script src="{{asset('js/ui.spinner.js')}}"></script>
+			<script src="{{asset('js/custom.js')}}"></script>
+			<script src="{{asset('js/functiongen.js')}}"></script>
+ 			<script src="{{asset('js/FileUp2.js')}}"></script>
+ 			<script src="{{asset('js/datatable_plugins.js')}}"></script>
+            
+    <script type="text/javascript">
+
+	    var trselected; 
+		var oTable = null;
+		var values = [];
+		
+            $(document).ready(function() {
+            	ajaxResposeData("select_curso","{{ path('_lista_cursos',{'tipo':'multiple'}) }}");
+            	$('#number').on("change",cambioNumber);            	
+            	FileUp = new FileUp(EnviarForm);
+            	
+            	enviar("ActivarCursoForm",reloadTable);
+            	enviar("DesactivarCursoForm",reloadTable);
+
+            	$("#pdfAsignacion").click(function(event) {
+		            $("#tabla_asignacion th").css("width","auto");
+		        	$("#content").val($("#tabla_asignacion").html());
+		        	$("#title").val($("h3").html());
+		            $("#AsignacionExportForm").attr("action", "{{asset('extensiones/exportpdf.php')}}");
+			 		$("#AsignacionExportForm").submit();
+		        });
+
+		        $("#excelPAsignacion").click(function(event) {
+		        	$("#content").val("<table>" + $("#tabla_asignacion").html() + "</table>");
+					$("#AsignacionExportForm").attr("action", "{{asset('extensiones/exportexcel.php')}}");
+					$("#AsignacionExportForm").submit();
+				        });
+            	
+            	$("#CrearCursoForm").submit(function(event){
+            		event.preventDefault();
+            		if(FileUp.getFilesNumber()>0)
+            			FileUp.uploadQueue(event);
+            		else{
+            			$("#CrearCursoForm").unbind();
+            			EnviarForm();
+            		}
+            	});
+
+            	$('#tabla_asignacion tbody').click(function(event){
+					$(oTable.fnSettings().aoData).each(function(){
+						$(this.nTr).removeClass('row_selected');
+			 		});
+			        $(event.target.parentNode).addClass('row_selected');
+			        	trselected = $(event.target.parentNode);
+			            var tds = $(trselected).find('td');
+			  			$.each(tds, function(index, item) {
+			            	values.push(item.innerHTML); 
+			            });
+			  			var anSelected = fnGetSelected(oTable);
+			  			
+						if(anSelected.length !=0){
+							var tds = $(anSelected).find('td');
+							var val = [];
+							$.each(tds, function(index, item) {
+								val.push(item.innerHTML); 
+							});
+							$("#idCursoActivar").val(val[0]);
+							$("#idCursoDesactivar").val(val[0]);      
+							}
+						});
+			        oTable = $('#tabla_asignacion').dataTable({
+						"bProcessing": true,
+						"bServerSide": false,
+						"bDestroy": true,
+						"sAjaxSource": '{{path("_tabla_cursos")}}',
+						"aoColumns": [
+					            { "mDataProp": "id" },
+			                    { "mDataProp": "titulo" },
+			                    { "mDataProp": "descripcion" },
+			                    { "mDataProp": "fecha_creacion" },
+			                    { "mDataProp": "numero_sesiones" },
+			                    { "mDataProp":"activo"}
+					                ],
+						"aaSorting": [ [0,'asc'], [1,'asc'] ],
+						"aoColumnDefs": [
+				        	{ "sType": 'string-case', "aTargets": [ 2 ] }],
+						"sDom": 'T<"clear">lfrtip',
+				        "oTableTools": {
+							"sRowSelect": "single",
+				            "fnRowSelected": function ( node ) {
+				            	var s=$(node).children();
+				                alert("Selected Row : " + s[0]);
+				            }
+						},
+						"sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+						"sPaginationType": "bootstrap",
+						"oLanguage": {
+							"sLengthMenu": "_MENU_ registros por página"
+						}
+					});
+            	});
+
+            var EnviarForm = function(){
+            	$("#CrearCursoForm").unbind();
+				enviar("CrearCursoForm",reloadpage);
+				$("#CrearCursoForm").submit();
+               };
+
+            function cambioNumber() {
+            	var num = $('#number').val();
+            	$("#sesiones").html("");
+            	for(var i=0; i<num;i++){
+					var li = document.createElement('li');
+					li.id = "sesion"+i;
+                	
+                	var select = document.createElement('select');                	
+                	select.name = "tipo"+i;
+                	li.appendChild(select);
+            			
+            		var option0 = document.createElement('option');
+            		var t = document.createTextNode("Sesion");
+            		option0.value = "2";
+            		option0.appendChild(t);
+            		select.appendChild(option0);
+
+            		var option1 = document.createElement('option');
+            		var t = document.createTextNode("Extra");
+            		option1.value = "1";
+            		option1.appendChild(t);
+            		select.appendChild(option1);
+
+            		var detall = document.createElement('input');
+            		detall.type = "text";
+            		detall.name = "detalle"+i;
+            		detall.placeholder = 'Detalle de sesion';
+            		detall.className = "detalle";
+            		detall.required = true;
+            		li.appendChild(detall);
+
+            		var file = document.createElement('input');
+            		file.type = "file";
+            		file.name = "file"+i;
+            		file.className = "fileup";
+            		li.appendChild(file);
+
+            		var hidden = document.createElement('input');
+            		hidden.type = "hidden";
+            		hidden.name = "filename"+i;
+            		hidden.className = "name";
+            		li.appendChild(hidden);
+
+            		var div = document.createElement('input');
+            		div.className = "loadbar";
+
+            		document.getElementById("sesiones").appendChild(li);
+            	}
+            	FileUp.init();
+        	};
+
+        	var reloadTable = function(data){
+        		oTable.fnReloadAjax();
+        	}
+    </script>             
+{%endblock%}
+            
+            
+{% block content %}
+    <div class="span9" id="registro_form">
+    <h1>Registrar Curso</h1>
+    <form class="form-horizontal" id="CrearCursoForm" name="CrearCursoForm" method="POST" action="{{path( 'discipular_registrar_curso') }}">
+     		<fieldset>
+			<legend>Crear Curso</legend>
+			<div class="control-group">
+				<label class="control-label">Titulo</label>
+				<div class="controls">
+					<input class="input-xxlarge" name="titulo" id="titulo" type="text" required>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Prerequisito</label>
+				<div class="controls">
+					<div id="select_curso">
+					</div>
+				</div>
+				<br>
+				<label class="control-label">Estado</label>
+				<div class="controls">
+					<select name="estado" id="estado" required>
+						<option value="true">Activado</option>
+						<option value="false">Desactivado</option>
+					</select>
+				</div>
+			</div>	
+			<div class="control-group">
+				<label class="control-label">Descripcion</label>
+				<div class="controls">
+					<textarea class="input-xxlarge" name="descripcion" id="descripcion" rows="3" required></textarea>
+				</div>
+			</div>
+		</fieldset>
+		<fieldset>
+			<legend>Detalles de Sesiones</legend>
+			<div class="control-group">
+				<label class="control-label">Número de Sesiones</label>
+				<div class="controls">
+					<input id="number" name="numsesiones" type="number" required>
+				</div>
+			</div>
+			<br>
+			<div>
+				<ul id = "sesiones" class="lista-arch">				
+				</ul>
+			</div>
+		</fieldset>
+		<div class="control-group">
+			<div class="controls">
+				<input id="cargar" class="btn btn-primary" type="submit" value="Guardar" >
+			</div>
+		</div>
+		</form>	
+	    
+	    <fieldset>
+		<div class="box">
+		<div class="box-head tabs">
+            <h3>Administrar Asignaciones</h3>						
+        </div>
+        <div class="box-content box-nomargin">
+        	<form id='AsignacionExportForm' method='POST'>
+        		<input id='content' type='hidden' name='content' >
+                <input id='title' type='hidden' name='title' >
+                <input id='pdfAsignacion' type='button' value='PDF' class="btn btn-info">
+                <input id='excelPAsignacion' type='button' value='Excel' class="btn btn-info">
+            </form>
+		    <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped dataTable table-bordered"  id="tabla_asignacion" name="tabla_asignacion">
+		    	<thead>
+		            <tr>
+						<th>ID</th>
+						<th>Titulo</th>
+						<th>Descripcion</th>
+						<th>Fecha de Creacion</th>
+						<th>Nro de Sesiones</th>
+		                <th>Estado</th>
+		            </tr>
+				</thead>
+				<tbody id="tablas2" name="tablas2" ></tbody>
+		    </table>
+		</div>
+		<div id="alineados">
+		<form  method="POST" id="ActivarCursoForm" action='{{path('discipular_activar_curso')}}'>
+			<input id="idCursoActivar" type="hidden" name="id">
+			<input type="submit" class="btn btn-primary" id="activar" name="activar" value="Activar">
+		</form>
+		<form  method="POST" id="DesactivarCursoForm" action='{{path('discipular_desactivar_curso')}}'>
+			<input id="idCursoDesactivar" type="hidden" name="id">
+			<input type="submit" class="btn btn-danger" id="desactivar" name="desactivar" value="Desactivar">
+		</form>
+		</div>
+	</div>
+	</div>
+	</fieldset>
+{% endblock %}      

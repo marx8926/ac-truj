@@ -1,0 +1,50 @@
+<?php
+
+namespace AE\DataBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * ClaseCurso
+ *
+ * @ORM\Table(name="clase_curso")
+ * @ORM\Entity
+ */
+class ClaseCurso
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="clase_curso_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_dicto", type="date", nullable=true)
+     */
+    private $fechaDicto;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tema", type="integer", nullable=true)
+     */
+    private $tema;
+
+    /**
+     * @var \CursoImpartido
+     *
+     * @ORM\ManyToOne(targetEntity="CursoImpartido")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_curso_impartido", referencedColumnName="id")
+     * })
+     */
+    private $idCursoImpartido;
+
+
+}

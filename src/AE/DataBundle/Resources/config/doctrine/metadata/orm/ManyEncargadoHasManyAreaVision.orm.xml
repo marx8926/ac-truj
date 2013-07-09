@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="ManyEncargadoHasManyAreaVision" table="many_encargado_has_many_area_vision">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="SEQUENCE"/>
+    </id>
+    <field name="idEncargado" type="bigint" column="id_encargado" nullable="false"/>
+    <many-to-one field="idAreaVision" target-entity="AreaVision">
+      <join-columns>
+        <join-column name="id_area_vision" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

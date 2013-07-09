@@ -1,0 +1,268 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Asignación a discipulado - '{{red}}' {% endblock %}
+        
+        {% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/DT_bootstrap.css')}}" rel="stylesheet" type="text/css">
+        {% endblock %}
+        
+{% block content %}
+        <div class="span9" id="registro_form">
+        <br>
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" >Red</label>
+            <div class="controls">
+                <select id="red_lista" name="red_lista" class="rango">
+                   
+                </select>
+            </div>
+        </div>
+        </fieldset>
+        
+      
+        <h1>Lista de Miembros de red en mentoreo</h1>
+        
+	<div class="box">
+		<div class="box-head tabs">
+            <h3>Líderes de Red</h3>							
+        </div>
+
+        <div class="box-content box-nomargin">
+        	<form id='form' method='POST'>
+                <input id='content' type='hidden' name='content' >
+                <input id='title' type='hidden' name='title' >
+				<input id='pdfbutton' type='button' value='PDF' class="btn btn-info">
+				<input id='excelbutton' type='button' value='Excel' class="btn btn-info">
+	
+    <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped dataTable table-bordered"  id="persona" name="persona">
+        <thead>
+            <tr>
+                <th>ID</th>
+		<th>Nombres</th>
+		<th>Apellidos</th>
+		<th>Edad</th>
+                <th>Inicio</th>
+		<th>Célula</th>
+                <th>Activo</th>
+            </tr>
+	</thead>
+	<tbody id="tablas1" name="tablas1" >
+	
+	</tbody>
+	
+    </table>
+    </form>
+    	</div>
+                
+      <div class="form-inline" id="usos" name="usos">
+          
+          <form id="activar" name="activar" type="POST" action="{{path('enviar_activar_discipulo')}}">
+            <input type="hidden" id="idactivar" name="idactivar" value="-1">  
+            <input  type="submit" value="Activar" class="btn btn-primary" >   
+          </form>
+          
+          <form id="desactivar" name="desactivar" type="POST" action="{{path('enviar_desactivar_discipulo')}}">
+            <input type="hidden" id="iddesactivar" name="iddesactivar">
+            <input  type="submit" value="Desactivar" class="btn btn-danger" > 
+          </form>
+          <input id="cambiar" name="cambiar" type="button" value="Cambiar célula" class="btn btn-primary">
+      </div>
+      </div>
+      <div id="cambio" name="cambio" >          
+       <form id="myForm" name="myForm" method="POST" action="{{path('enviar_actualizar_discipulado_up')}}" class="form-horizontal" >
+           <fieldset>
+          <div class="control-group">
+            <label class="control-label" >Celula discipulado</label>
+            <div class="controls">
+                <select id="celula_lista" name="celula_lista" >
+                   
+                </select>
+            </div>
+        </div>
+        </fieldset>
+                <input id="personaid" name="personaid" type="hidden" value="-1" >
+                
+                <input id="idred" name="idred" type="hidden" value="-1">
+                <div class="control-group">
+                    <label class="control-label" ></label>
+                    <div class="controls">
+                          <input type="submit" id="subir" name="subir" value="Asignar" class="btn btn-primary">
+                    </div>
+                </div>
+       </form>
+       </div>
+	
+	
+        
+{% endblock %}
+     
+   {%block javascript %}
+          <script src="{{asset('js/jquery.js')}}"></script>
+			<script src="{{asset('js/less.js')}}"></script>
+			<script src="{{asset('js/bootstrap.min.js')}}"></script>
+			<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+			<script src="{{asset('js/bootstrap.js')}}"></script>
+			<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+			<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+			<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+			<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+			<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+			<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+			<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+			<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+			<script src="{{asset('js/ui.spinner.js')}}"></script>
+			<script src="{{asset('js/custom.js')}}"></script>
+                        <script src="{{asset('js/tablasfeatures.js')}}"></script>
+                       	<script src="{{asset('js/functiongen.js')}}"></script>
+                        <script src="{{asset('js/ganar.js')}}"></script>
+
+			
+			<script src="https://www.google.com/jsapi"></script>
+            <!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->              
+            <script src="{{asset('js/DT_bootstrap.js')}}"> </script> <!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->     
+            
+             <script type="text/javascript">
+                 var trselected; 
+                var oTable;
+         
+                var values = []; 
+                
+                var logg = function logeo(data)
+                {
+                    console.log(data);
+                    
+                    if(data.responseCode == 200)
+                        {
+                            alert('Registro Completado');
+                            location.reload();
+                        }
+                }
+    
+                $(document).ready(function(){
+                                     
+                   enviar('myForm', logg);
+                   enviar('activar', logg);
+                   enviar('desactivar', logg);
+
+                   
+                   $('#usos').css({'display':'none'});
+                   $('#cambio').css({'display':'none'});
+   
+                
+                   
+                   var rede = '{{red}}' ;
+                   
+                   if(rede.length > 0)
+                   {
+                      $("<option value='"+rede+"'>"+rede+"</option>").appendTo('#red_lista');
+                      cambiar_red();
+                   }
+                   else
+                    initRed('{{path('servicio_red_sin')}}');
+
+                    $('#red_lista').change(cambiar_red);
+                    
+                      $('#persona tbody').click(function(event){
+                        $(oTable.fnSettings().aoData).each(function(){
+                        $(this.nTr).removeClass('row_selected');
+                        });
+                
+                        $(event.target.parentNode).addClass('row_selected');
+                        
+                        trselected = $(event.target.parentNode);
+                
+                        var tds = $(trselected).find('td');
+                
+                        values = [];
+  
+                        $.each(tds, function(index, item) {
+                            values.push(item.innerHTML); 
+                        }); 
+                        $('#select').css({'display':'block'});
+                        
+                        $('#personaid').val(values[0]);
+                        
+                        $('#idactivar').val(values[0]);
+                        $('#iddesactivar').val(values[0]);
+
+                        
+                        $('#usos').css({'display':'block'});
+
+                });
+                
+                $('#cambiar').click(function(){
+                    
+                    $('#cambio').css({'display':'block'});
+                });
+            });
+                
+            function recargar_celula()
+            {
+                cambiar_red();
+            }
+                
+            function cambiar_red()
+            {
+               var nombre = $("#red_lista option:selected").val();  
+               
+               $('#idred').val(nombre);
+            
+               var route = '{{path('servicio_miembros_con_discipulado',{'red': 'name'})}}';
+            
+               var rutas = route.replace('name',nombre);
+               
+               var url = "{{path('servicio_celulas_discipulado_red',{'red':'net'})}}";
+               url = url.replace('net',nombre);
+               
+               ajaxListPost(url,'celula_lista',nombre);
+               
+               get_tabla(rutas);
+                  
+            }
+            
+            function get_tabla(url)
+            {
+                 oTable = $('#persona').dataTable( {
+                                    
+                "bProcessing": true,
+                "bServerSide": false,
+                "bDestroy": true,
+                "sAjaxSource": url,
+                "aoColumns": [
+                    { "mDataProp": "id" },
+                    { "mDataProp": "nombre" },
+                    { "mDataProp": "apellidos" },
+                    { "mDataProp": "edad" },
+                    { "mDataProp": "inicio"},
+                    { "mDataProp": "celula"},
+                    { "mDataProp": "activo"}
+                ],
+                "aaSorting": [ [0,'asc'], [1,'asc'] ],
+                "aoColumnDefs": [
+                    { "sType": 'string-case', "aTargets": [ 2 ] }
+                    ],"sDom": 'T<"clear">lfrtip',
+                "oTableTools": {
+                    "sRowSelect": "single",
+                    "fnRowSelected": function ( node ) {
+                        var s=$(node).children();
+                        alert("Selected Row : " + s[0]);
+                    }
+                },
+                "sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+				"sPaginationType": "bootstrap",
+				"oLanguage": {
+					"sLengthMenu": "_MENU_ registros por página"
+				}
+                } );	
+            
+            }
+              
+            </script>
+            
+    {%endblock%}

@@ -1,0 +1,273 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Registro de Asistencia - {% endblock %}
+
+{% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+        
+        <link rel="stylesheet" href="{{asset('css/DT_bootstrap.css')}}">  
+                 
+{% endblock %}                 
+
+{% block content %}
+<div class="span9">
+	<h1>Registro de Asistencia</h1>
+	<br />
+    	<div class="form-horizontal">
+        	<div class="control-group">
+            	<label class="control-label" >Red</label>
+                <div class="controls">
+                	<select id="red_lista" name="red_lista"></select>
+                </div>
+            </div>
+            <div class="control-group">
+            	<label class="control-label" >Tipo</label>
+                <div class="controls">
+                	<select id="tipo_list" name="tipo_list">
+                    	<option value="0">Evangelistica</option>
+                        <option value="1">Discipulado</option>
+                    </select>
+               	</div>
+            </div>
+        </div>	
+        <div class="box">
+			<div class="box-head">
+				<h3>Células</h3>
+			</div>
+			<div class="box-content box-nomargin" id="tabla_celulas">
+			</div>
+		</div>
+    	<div  id="tema_cell" name="tema_cell">
+			<div class="box">
+				<div class="box-head">
+					<h3>Temas de Células</h3>
+				</div>
+				<div class="box-content box-nomargin" id="tabla_temas">
+                	<table cellpadding='0' cellspacing='0' border='0' class='display table table-striped dataTable table-bordered' id="tema" name="tema" >
+                    	<thead>
+                        	<tr>
+                                                                <th>Id</th>
+								<th>Titulo</th>
+								<th>Autor</th>
+								
+                                                                <th width="12%">Asignado</th>
+								<th width="12%">Dictado</th>
+                                                                <th>Invitados</th>
+                            </tr>
+                       	</thead>
+                    </table>
+				</div>
+			</div>
+		</div>
+	<div id="asistencia" name="asistencia">
+    	<form class="form-horizontal" method="POST" action="{{path('enviar_asistencia_celula')}}" >
+        	<input type="hidden" id="celulaid" name="celulaid" value="">
+            <input type="hidden" id="red_id" name="red_id" value="">
+            <input type="hidden" id="tip_cell" name="tip_cell" value="">
+            <input type="hidden" id="titulocell" name="titulocell" value="">
+            <input type="hidden" id="dia_cell" name="dia_cell" value="">
+            <input type="hidden" id="horario_cell" name="horario_cell" value="">
+            <input type="hidden"  id="dictado_cell" name="dictado_cell" value="">
+            <input type="hidden" id="asiste" name="asiste" value="">
+            {% if is_granted('ROLE_LIDER') %}
+                <input type="submit" id="asistir" name="asistir" value="Tomar Asistencia" class="btn btn-primary">
+            {% endif%}
+        </form>
+    </div>
+</div>
+       
+                 
+{% endblock %}
+      
+ {%block javascript %}
+            
+            <script src="{{asset('js/jquery.js')}}"></script>
+			<script src="{{asset('js/less.js')}}"></script>
+			<script src="{{asset('js/bootstrap.min.js')}}"></script>
+			<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+			<script src="{{asset('js/bootstrap.js')}}"></script>
+			<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+			<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+			<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+			<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+			<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+			<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+			<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+			<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+			<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+			<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+			<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+			<script src="{{asset('js/ui.spinner.js')}}"></script>
+			<script src="{{asset('js/custom.js')}}"></script>
+                        <script src="{{asset('js/functiongen.js')}}"></script>
+                        <script src="{{asset('js/tablasfeatures.js')}}"></script>
+                        <script src="{{asset('js/ganar.js')}}"></script>
+	
+			<script src="https://www.google.com/jsapi"></script>
+            <!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->              
+            <script src="{{asset('js/DT_bootstrap.js')}}"> </script>
+            
+    <script type="text/javascript">
+        
+         var trselected; 
+	 var oTable;
+         
+        var values = [];
+        
+        var funcion = function(data)
+            {
+                if(data.responseCode==200)
+                {
+                    alert('Registro Completado');
+                    //location.reload();
+                }
+                else
+                {
+                    alert('Error inesperado');
+                }
+                
+            }
+            
+        function est()
+        {
+            var myTr = [];
+           $('#persona tbody tr').each(function () {
+               
+              var rt = $(this).find('td').first();
+              
+               myTr.push(rt.text());
+           
+            });           
+            return myTr;
+        }
+            
+        var ids=[];
+        
+        function IrATema(boton)
+        {
+            console.log($(boton).attr("data"));
+            
+            getTemaTabla($(boton).attr("data"));
+             $('#tema_cell').css({display:'block'});
+             $('#celulaid').val($(boton).attr("data"));
+        
+  
+        }
+        
+        function recargar_celula()
+        {
+            cargar_datos();
+        }
+        
+        function cargar_datos()
+        {
+           $('#red_id').val($('#red_lista').val());
+                                        
+            var url = "{{path('_enviar_lista_celula_red_tipo',{'red':':red','tipo':':tipo'})}}";
+                
+            var net = $('#red_lista option:selected').val();
+            if(net!='-1' && net.length>0)
+            {
+                url = url.replace(':red',$('#red_lista option:selected').val());
+                url = url.replace(':tipo',$('#tipo_list option:selected').val());
+                ajaxResposeData("tabla_celulas",url); 
+            }
+        }
+	$(document).ready(function() {
+            
+             var url1 = '{{path('_enviar_lista_red')}}';
+             $('#tema_cell').css({display:'none'});
+             $('#asistencia').css({display:'none'});
+
+            var rede = '{{red}}' ;
+            
+              if(rede.length > 0)
+             {
+                 $("<option value='"+rede+"'>"+rede+"</option>").appendTo('#red_lista');
+             }             
+             else
+             initRed('{{path('servicio_red_sin')}}');
+            
+            
+            
+                var url = "{{path('_enviar_lista_celula_red_tipo',{'red':':red','tipo':':tipo'})}}";
+                
+		$("#redes_lista").change(cargar_datos);
+                                
+                $("#tipo_list").change(cargar_datos);
+                                
+                
+                cargar_datos();
+                
+                $('#tema tbody').click(function(event){
+                    $(oTable.fnSettings().aoData).each(function(){
+                        $(this.nTr).removeClass('row_selected');
+                    });
+                
+                    $(event.target.parentNode).addClass('row_selected');
+                
+                    trselected = $(event.target.parentNode);
+                
+                    var tds = $(trselected).find('td');
+                    
+                    values = [];
+  
+                    $.each(tds, function(index, item) {
+                        values.push(item.innerHTML); 
+                    });   
+                    
+                    $('#asiste').val(values[0]);
+                    $('#asistencia').css({display:'block'});
+                    $('#titulocell').val(values[1]);
+                    $('#dictaco_cell').val(values[5]);
+                    
+                });
+                
+       	 });
+         
+         function getTemaTabla(celula)
+         {
+             var url = "{{path('_enviar_lista_celula_temas',{'id':':id'})}}";
+             
+            url = url.replace(':id',celula);
+                         
+             /* Build the DataTable with third column using our custom sort functions */
+            oTable = $('#tema').dataTable( {
+                                    
+                "bProcessing": true,
+                "bServerSide": false,
+                "bDestroy": true,
+                "sAjaxSource": url,
+                "aoColumns": [
+                    { "mDataProp": "id" },
+                    { "mDataProp": "titulo" },
+                    { "mDataProp": "autor" },                  
+                    { "mDataProp": "asignado"},
+                    { "mDataProp": "dictado"},
+                    {"mDataProp": "invitado"}
+                ],
+		"aaSorting": [ [5,'desc'], [0,'desc'] ],
+		"aoColumnDefs": [
+                    { "sType": 'string-case', "aTargets": [ 2 ] }
+		],"sDom": 'T<"clear">lfrtip',
+                "oTableTools": {
+			"sRowSelect": "single",
+                        "fnRowSelected": function ( node ) {
+                            var s=$(node).children();
+                            alert("Selected Row : " + s[0]);
+                        }
+		},
+                "sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+					"sPaginationType": "bootstrap",
+					"oLanguage": {
+						"sLengthMenu": "_MENU_ registros por página"
+					}
+            } );	
+   
+         }  
+       </script>
+{%endblock %} 

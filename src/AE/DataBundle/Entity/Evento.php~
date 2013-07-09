@@ -1,0 +1,71 @@
+<?php
+
+namespace AE\DataBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Evento
+ *
+ * @ORM\Table(name="evento")
+ * @ORM\Entity
+ */
+class Evento
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="SEQUENCE")
+     * @ORM\SequenceGenerator(sequenceName="evento_id_seq", allocationSize=1, initialValue=1)
+     */
+    private $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nombre", type="string", length=200, nullable=false)
+     */
+    private $nombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="text", nullable=true)
+     */
+    private $descripcion;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tipo", type="smallint", nullable=true)
+     */
+    private $tipo;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_ini", type="date", nullable=true)
+     */
+    private $fechaIni;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fecha_fin", type="date", nullable=true)
+     */
+    private $fechaFin;
+
+    /**
+     * @var \Ubicacion
+     *
+     * @ORM\ManyToOne(targetEntity="Ubicacion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_ubicacion", referencedColumnName="id")
+     * })
+     */
+    private $idUbicacion;
+
+
+}

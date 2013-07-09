@@ -1,0 +1,278 @@
+{% extends "::base.html.twig" %}
+
+{% block titulo %}Descartar Consolidados - {% endblock %}
+
+{% block stylesheets %}
+        <link href="{{asset('css/bootstrap.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/style.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link href="{{asset('css/bootstrap-responsive.css')}}" media="screen" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="{{asset('css/DT_bootstrap.css')}}">               
+{% endblock %}                 
+
+{% block content %} 
+<div class="span9" >
+	<h1>Descartar a miembros en leche espiritual</h1>
+        
+        <div class="control-group">
+            <label class="control-label" >Red</label>
+            <div class="controls">
+                <select id="red_lista" name="red_lista" class='rango'>
+                   
+                </select>
+            </div>
+        </div>
+    <div class="box">
+        <div class="box-head tabs">
+            <h3>Descartar</h3>							
+        </div>
+
+        <div class="box-content box-nomargin">
+        	
+    <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped dataTable table-bordered"  id="persona" name="persona">
+        <thead>
+            <tr>                             
+                <th>ID</th>
+                <th width='13%'>Inicio Leche</th>
+                <th width='12%'>Convertido</th>
+                <th>Red</th>
+                <th width="8%">Célula</th>
+                <th width="8%">Codigo</th>
+                <th>Nombres</th>
+		<th>Apellidos</th>
+                <th width="6%">Edad</th>
+                <th>Telefono</th>
+            </tr>
+	</thead>
+	<tbody id="tablas1" name="tablas1" >
+	
+	</tbody>
+	
+    </table>
+        
+    <div  id="ocultar" name="ocultar">
+            <fieldset class="form-horizontal">
+            	<div class="control-group" id="oculto">
+		            <label class="control-label">ID:</label>
+		            <div class="controls">
+		                <p style="margin-top: 5px;" id="nombre" name="nombre"></p>
+		            </div>
+		       	</div>                
+            </fieldset>
+    
+    <br>
+    <form class="form-horizontal" method="POST" id="myForm" name="myForm" action="{{path('consolidar_descartar_update')}}">
+                <div class="control-group" >
+                	<label class="control-label"></label>
+                        <input type='hidden' id="nomb" name="nomb" value="">
+                        <input type="hidden" id="pers" name="pers" value="">
+                  </div>
+            
+            <div class="control-group" >
+                <label class="control-label">Motivo:</label>
+                <div class="controls">
+                    <textarea rows="5" id="motivo" name="motivo" class="input-xxlarge" required> </textarea>
+                    <p class="help-block">Motivo por el que se descarto</p>
+                </div>
+            </div>
+            <div class="control-group" >
+                <label class="control-label"></label>
+                    <div class="controls">
+                        <button class="btn btn-primary" id="registro" name="registro"> Descartar</button>
+                    </div>
+            </div>
+    </form>
+    
+    </div>
+    
+   </div>
+   </div>
+ </div>    
+                 
+{% endblock %}
+      
+ {%block javascript %}
+ 	<script type="text/javascript" src="{{asset('js/jquery.js')}}"></script>
+             
+            <script src="http://www.google.com/jsapi"></script>
+            
+            <script src="{{asset('js/jquery.js')}}"></script>
+			<script src="{{asset('js/less.js')}}"></script>
+			<script src="{{asset('js/bootstrap.min.js')}}"></script>
+			<script src="{{asset('js/jquery.uniform.min.js')}}"></script>
+			<script src="{{asset('js/bootstrap.js')}}"></script>
+			<script src="{{asset('js/bootstrap.timepicker.js')}}"></script>
+			<script src="{{asset('js/bootstrap.datepicker.js')}}"></script>
+			<script src="{{asset('js/chosen.jquery.min.js')}}"></script>
+			<script src="{{asset('js/jquery.fancybox.js')}}"></script>
+			<script src="{{asset('js/plupload/plupload.full.js')}}"></script>
+			<script src="{{asset('js/plupload/jquery.plupload.queue/jquery.plupload.queue.js')}}"></script>
+			<script src="{{asset('js/jquery.cleditor.min.js')}}"></script>
+			<script src="{{asset('js/jquery.inputmask.min.js')}}"></script>
+			<script src="{{asset('js/jquery.tagsinput.min.js')}}"></script>
+			<script src="{{asset('js/jquery.mousewheel.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.min.js')}}"></script>
+			<script src="{{asset('js/jquery.dataTables.bootstrap.js')}}"></script>
+			<script src="{{asset('js/jquery.textareaCounter.plugin.js')}}"></script>
+			<script src="{{asset('js/ui.spinner.js')}}"></script>
+                        <script src="{{asset('js/tablasfeatures.js')}}"></script>
+			<script src="{{asset('js/custom.js')}}"></script>
+                        <script src="{{asset('js/ganar.js')}}"></script>
+                        <script src="{{asset('js/datatable_plugins.js')}}"></script>			
+
+
+            <!--[if lt IE 9]> <script type="text/javascript" src="/net/public/js/html5.js"></script><![endif]-->              
+            <script type="text/javascript" charset="utf-8" language="javascript" src="{{asset('js/DT_bootstrap.js')}}"> </script>
+   
+    <script type="text/javascript">
+
+         var trselected; 
+	 var oTable;
+         
+        var values = [];
+        
+        function recargar_celula()
+        {
+             var nom = $('#red_lista option:selected').val();
+            
+            if(nom!='-1')
+            {
+                
+                var url = "{{path('servicio_por_descartar_red',{'red':'net'})}}";
+                url = url.replace('net',nom);
+                                
+                get_tabla(url);
+            }
+        }
+         
+	$(document).ready(function() {
+            
+             $("#red_lista").change(recargar_celula);
+             
+             $("#oculto").css({'display':'none'});
+            
+            var rede = '{{red}}' ;
+                                      
+             if(rede.length > 0)
+             {
+                 $("<option value='"+rede+"'>"+rede+"</option>").appendTo('#red_lista');
+             }
+             else
+             initRed('{{path('servicio_red_sin')}}');
+         
+             
+            $('#ocultar').css({'display':'none'});
+            
+            $('#persona tbody').click(function(event){
+                $(oTable.fnSettings().aoData).each(function(){
+                    $(this.nTr).removeClass('row_selected');
+                });
+                
+                $(event.target.parentNode).addClass('row_selected');                
+                
+                trselected = $(event.target.parentNode);
+                
+                var tds = $(trselected).find('td');
+                values = [];
+  
+                $.each(tds, function(index, item) {
+                    values.push(item.innerHTML); 
+                }); 
+                 $('#nombre').text(values[0]);
+                 $('#nomb').val(values[0]);
+                 $('#pers').val(values[5]);
+                 
+                $('#ocultar').css({'display':'block'});               
+            	
+            });
+            
+            //click handler para eliminar
+            $('#myForm').submit(function(){
+                var anSelected = fnGetSelected(oTable);
+                //oTable.fnDeleteRow(anSelected[0]);
+                if(anSelected.length !==0)
+                {
+                    var tds = $(anSelected).find('td');
+                    var val = [];
+                    $.each(tds, function(index, item) {
+                    val.push(item.innerHTML);   
+                      }); 
+                      
+                    var id = $('#nomb').val();                 
+                    var url=$("#myForm").attr("action");                                         
+                    //start send the post request
+                    $.post(url,{
+                        formName:$("#myForm").serialize(),
+                        other:"attributes"
+                    },function(data){
+                    //the response is in the data variable
+                    if(data.responseCode==200 ){           
+                      
+                       alert('Registro Completado');
+                       //var anSelected = fnGetSelected( oTable );
+                       //oTable.fnDeleteRow( anSelected[0] );
+                       oTable.fnReloadAjax();                    
+                    }
+                    else if(data.responseCode==400){//bad request
+                       alert('Error bad request');
+                        }
+                    else{                        
+                        if(data.responseCode==500)
+                        {
+                            alert('Error bad request');
+                        }
+                        else alert("An unexpeded error occured.");
+                        }
+                    }
+                    );                    
+                }
+                return false;
+            });
+ 
+           
+	 });
+         
+         function get_tabla(url)
+         {
+              /* Build the DataTable with third column using our custom sort functions */
+            oTable = $('#persona').dataTable( {
+                                    
+                "bProcessing": true,
+                "bServerSide": false,
+                "bDestroy": true,
+                "sAjaxSource": url,
+
+                "aoColumns": [
+                    { "mDataProp": "id" },
+                    { "mDataProp": "inicio_leche" },
+                    { "mDataProp": "convertido" },
+                    {"mDataProp": "red"},
+                    { "mDataProp": "celula"},
+                    { "mDataProp": "codigo"},
+                    { "mDataProp": "nombre"},
+                    { "mDataProp": "apellidos"},
+                    { "mDataProp": "edad" },
+                    { "mDataProp": "telefono" }
+                ],
+		"aaSorting": [ [0,'asc'], [1,'asc'] ],
+		"aoColumnDefs": [
+                    { "sType": 'string-case', "aTargets": [ 2 ] }
+		],"sDom": 'T<"clear">lfrtip',
+                "oTableTools": {
+			"sRowSelect": "single",
+                        "fnRowSelected": function ( node ) {
+                            var s=$(node).children();
+                            alert("Selected Row : " + s[0]);
+                        }
+		},
+                "sDom": "<'row'<'span8'l><'span8'f>r>t<'row'<'span8'i><'span8'p>>",
+					"sPaginationType": "bootstrap",
+					"oLanguage": {
+						"sLengthMenu": "_MENU_ registros por página"
+					}
+            } );	
+         }
+       </script>
+{%endblock %} 
+
+
+

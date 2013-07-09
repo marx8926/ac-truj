@@ -1,0 +1,11 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+RedirectMatch permanent ^/app\.php/(.*) /$1
+
+    #<IfModule mod_vhost_alias.c>
+    #    RewriteBase /
+    #</IfModule>
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ app.php [QSA,L]
+</IfModule>
