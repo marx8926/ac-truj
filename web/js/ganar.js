@@ -14,7 +14,7 @@ function distrito(dato)
     $("#distrito_lista").empty();
     for(var i=0;i<dato.length;i++)
     {
-            if(dato[i].distrito==='TUMBES')
+            if(dato[i].distrito==='TRUJILLO')
                 $('<option value='+dato[i].id+' data-long='+dato[i].long+' data-lat='+ dato[i].lati+' selected>'+dato[i].distrito+'</option>').appendTo('#distrito_lista');
             else
                 $('<option value='+dato[i].id+' data-long='+dato[i].long+' data-lat='+ dato[i].lati+'>'+dato[i].distrito+'</option>').appendTo('#distrito_lista');
@@ -27,7 +27,7 @@ function distrito(dato)
                 {
                     for(var i=0; i<datos.length ; i++)
                     {
-                        if(datos[i].departamento==='TUMBES')
+                        if(datos[i].departamento==='LA LIBERTAD')
                          $('<option value='+datos[i].coddepartamento+' selected>'+datos[i].departamento+'</option>').appendTo('#departamento_lista');
                         else
                          $('<option value='+datos[i].coddepartamento+'>'+datos[i].departamento+'</option>').appendTo('#departamento_lista');
@@ -65,7 +65,7 @@ function celula(dato)
                      $("#provincia_lista").empty();
                      for(var i=0;i<dato.length;i++)
                     {
-                        if(dato[i].provincia==='TUMBES')
+                        if(dato[i].provincia==='TRUJILLO')
                             $('<option value='+dato[i].codprovincia+' selected>'+dato[i].provincia+'</option>').appendTo('#provincia_lista');
                         else
                             $('<option value='+dato[i].codprovincia+' >'+dato[i].provincia+'</option>').appendTo('#provincia_lista');
